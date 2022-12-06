@@ -4,8 +4,8 @@ menuHeaderText(Text) :- format('~n~`*t ~p ~`*t~57|~n', [Text]).
 pvpMenu(BoardSizeOpt) :-
     optionNewLine(1, 'PLAY'),
     optionNewLine(2, 'GO BACK'),
-    readDigitBounds(1, 3, Choice).
-
+    readDigitBounds(1, 2, Choice),
+    pvpMenuNext(Choice, BoardSizeOpt).
 
 pveMenu(BoardSizeOpt, DifficultyOpt) :-
     optionNewLine(1, 'PLAY'),
@@ -15,23 +15,22 @@ pveMenu(BoardSizeOpt, DifficultyOpt) :-
     optionNewLine(2, 'GO BACK'),
     readDigitBounds(1, 3, Choice).
 
-rulesMenu :-
+rulesMenu(BoardSizeOpt, DifficultyOpt) :-
     write('THE RULES ARE PRETTY SIMPLE\n\n'),
-    option(1, 'GO BACK'),
-    readDigitBounds(1, 1, Choice),
-    rulesMenuNext(Choice).
+    readInput,
+    menu(BoardSizeOpt, DifficultyOpt).
 
 mainMenuNext(1, BoardSizeOpt, Difficulty) :- pvpMenu(BoardSizeOpt).
 
 mainMenuNext(2, BoardSizeOpt, Difficulty) :- pveMenu(BoardSizeOpt, Difficulty).
 
-mainMenuNext(3, BoardSizeOpt, Difficulty) :- rulesMenu.
+mainMenuNext(3, BoardSizeOpt, Difficulty) :- rulesMenu(BoardSizeOpt, DifficultyOpt).
 
 mainMenuNext(4, BoardSizeOpt, Difficulty) :- boardSizeMenu.
 
 mainMenuNext(5, BoardSizeOpt, Difficulty) :- halt(0).
 
-pvpMenuNext(1, BoardSizeOpt) :-    
+pvpMenuNext(1, BoardSizeOpt) :- %PLAY PVP   
     initial_state(BoardSizeOpt, Gamestate),
     start_game(Gamestate).
 
@@ -64,7 +63,7 @@ menu(BoardSizeOpt, Difficulty):-
     optionNewLine(3, 'RULES'),
     option(4, 'ADJUST BOARD SIZE'),
     toBoardSize(BoardSizeOpt, BoardSize),
-    format('Current = ~d: ', [BoardSize]),
+    format(' (Current = ~d) : ', [BoardSize]),
     newLine,
     optionNewLine(5, 'QUIT'),
     readDigitBounds(1, 5, Choice),

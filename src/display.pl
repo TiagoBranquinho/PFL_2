@@ -54,3 +54,34 @@ initial_state(4, [
     [0,0,0,0,0,0,0,0,0,0,0,0,0]
 ]).
 
+display_header(Player):- 
+    getPlayerName(Player, PlayerName),
+    format('~s\'s turn\n', [PlayerName]),
+    newLine, newLine.
+
+
+display_game(Gamestate):- 
+    getCurrPlayer(Gamestate, Player),
+    display_header(Player),
+    getCurrBoard(Gamestate, Board),
+    length(Board, NRows),
+    display_board(Board, NRows).
+
+display_board([], 0, _).
+
+display_board([H|T], I):- 
+    print_line(H),
+    display_board(T, Decrement),
+    Decrement is I-1.
+
+print_line([]):- 
+    write(' |'),
+    newLine.
+
+print_line([H|T]) :- 
+    digitToOutput(H, Output), %char_code???
+    write(' | '),
+    put_code(Output),
+    print_line(T).
+
+
