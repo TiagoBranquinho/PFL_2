@@ -21,19 +21,11 @@ digitToOutput(8,56).
 digitToOutput(9,57).
 
 
-read_line_to_string(Stream, String) :-
-    read_string(Stream, '\n', '\r', Sep, String0),
-    (   Sep \== -1
-    ->  String = String0
-    ;   String0 == ""
-    ->  String = end_of_file
-    ;   String = String0
-    ).
-
-toBoardSize(1, 7).
-toBoardSize(2, 9).
-toBoardSize(3, 11).
-toBoardSize(4, 13).
+toBoardSize(1, 5).
+toBoardSize(2, 6).
+toBoardSize(3, 7).
+toBoardSize(4, 8).
+toBoardSize(5,9).
 
 digitToRow(1,'A').
 digitToRow(2,'B').
@@ -69,7 +61,7 @@ getCurrPlayer([Player|Board], Player).
 getCurrBoard([Player|Board], Board).
 
 
-readDigitBounds(LowerBound, UpperBound, Number):-
+read_digit_bounds(LowerBound, UpperBound, Number):-
     format('Choose an Action (~d-~d): ', [LowerBound, UpperBound]),
     get_code(InputCode),
     peek_char(Char),
@@ -78,6 +70,9 @@ readDigitBounds(LowerBound, UpperBound, Number):-
     inputToDigit(InputCode, Number),
     (Number =< UpperBound, Number >= LowerBound),
     newLine.
+read_digit_bounds(LowerBound, UpperBound, Number):-
+    write('Not a valid number, try again\n'),
+    read_digit_bounds(LowerBound, UpperBound, Number).
 
 readInput :- 
     write('Press any key to return to Main Menu... '),
@@ -87,18 +82,6 @@ readInput :-
     get_char(Char),
     newLine.
 
-/* printNumber:-
-    readDigitBounds(2,5,Number),
-    format('| Read (~d) - ', [Number]). */
-
-chooseMove:-
-    
-    readDigitBounds(1,2,Number),
-    executeMove(Number).
-
-executeMove(1):- write('| You chose nr 1').
-
-executeMove(2):- write('| You chose nr 2').
-
 
 % consult('src/main.pl').
+% play.
