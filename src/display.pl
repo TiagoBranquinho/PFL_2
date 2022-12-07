@@ -64,15 +64,14 @@ display_game(Gamestate):-
     getCurrPlayer(Gamestate, Player),
     display_header(Player),
     getCurrBoard(Gamestate, Board),
-    length(Board, NRows),
-    display_board(Board, NRows).
+    display_board(Board).
 
-display_board([], 0, _).
+display_board([]):-
+    newLine.
 
-display_board([H|T], I):- 
+display_board([H|T]):- 
     print_line(H),
-    display_board(T, Decrement),
-    Decrement is I-1.
+    display_board(T).
 
 print_line([]):- 
     write(' |'),

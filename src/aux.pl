@@ -12,6 +12,15 @@ inputToDigit(57, 9).
 digitToOutput(0,48).
 digitToOutput(1,49).
 digitToOutput(2,50).
+digitToOutput(3,51).
+digitToOutput(4,52).
+digitToOutput(5,53).
+digitToOutput(6,54).
+digitToOutput(7,55).
+digitToOutput(8,56).
+digitToOutput(9,57).
+
+
 read_line_to_string(Stream, String) :-
     read_string(Stream, '\n', '\r', Sep, String0),
     (   Sep \== -1
