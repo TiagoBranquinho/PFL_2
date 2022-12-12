@@ -24,6 +24,15 @@ empty_tiles_row(Row, Column, [H|T], Player, ListOfEmpty):-
     NewColumn = Column + 1,
     empty_tiles_row(Row, NewColumn, T, Player, ListOfEmpty).
 
+
+getxy([(A,B)|T], A, B).
 %valid_moves(Gamestate, Player, ListOfMoves).
+duck([]):- newLine.
+duck([H|T]):- 
+    getxy(H, X, Y),
+    format('x -> ~d  y -> ~d \n', [X,Y]),
+    duck(T).
 
-
+gato:- 
+    empty_tiles(0, [[1,1,0], [0,2,3]], 1, ListOfEmpty),
+    duck(ListOfEmpty).

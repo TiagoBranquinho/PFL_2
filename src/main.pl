@@ -1,4 +1,4 @@
-:- consult('aux.pl').
+:- consult('auxiliar.pl').
 :- consult('display.pl').
 :- consult('menu.pl').
 :- consult('play.pl').
