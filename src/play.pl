@@ -1,12 +1,13 @@
 switch_players(OldPlayer, NewPlayer):- NewPlayer is -OldPlayer.
 
-start_game(Gamestate) :- 
+update_game(Gamestate) :- 
     display_game(Gamestate),
-    retrieve_move(Move).
+    retrieve_move(Gamestate, Move).
+    %move(Gamestate, Move, NewGameState).
 
 
-retrieve_move(Move):- 
-    retrieve_move_menu(Move).
+retrieve_move(Gamestate, Move):- 
+    retrieve_move_menu(Gamestate, Move).
 
 move(Gamestate, Move, NewGamestate) :-
     newLine.
