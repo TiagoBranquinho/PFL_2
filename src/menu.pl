@@ -96,7 +96,7 @@ first_move_menu(Gamestate, Move):-
     write('Line: '),
     read_row_bounds(1, MaxColumnRowDigit, RowNumber),
     format('Chosen coordinates: ~s~d', [ColumnChar, RowNumber]), newLine,
-    Move_1 = [pair(RowNumber - 1, ColumnNumber - 1), Player],
+    Move_1 = pair(pair(RowNumber - 1, ColumnNumber - 1), Player),
 
     write('Insert coordinates to place neutral stone'), newLine,
     write('Column '),
@@ -106,7 +106,7 @@ first_move_menu(Gamestate, Move):-
     write('Line: '),
     read_row_bounds(1, MaxColumnRowDigit, RowNumber_2),
     format('Chosen coordinates: ~s~d', [ColumnChar_2, RowNumber_2]), newLine,
-    Move_2 = pair(RowNumber_2 - 1, ColumnNumber_2 - 1),
+    Move_2 = pair(pair(RowNumber_2 - 1, ColumnNumber_2 - 1)),
     Move = [Move_1, Move_2],
 
     optionNewLine(1, 'Continue'),
