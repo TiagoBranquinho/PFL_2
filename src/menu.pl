@@ -34,6 +34,9 @@ pvpMenuNext(1, BoardSizeOpt) :- %PLAY PVP
     initial_state(BoardSizeOpt, Gamestate),
     update_game(Gamestate).
 
+pvpMenuNext(2, BoardSizeOpt) :-
+    menu(BoardSizeOpt, 1).
+
 rulesMenuNext(1, BoardSizeOpt, Difficulty) :- menu(BoardSizeOpt, Difficulty).
 
 newLine :- write('\n').
@@ -79,9 +82,9 @@ retrieve_move_menu(Gamestate, Move) :-
     optionNewLine(1, 'Place a stone AND a neutral one on empty cells'),
     optionNewLine(2, 'Replace two neutral stones with your stones AND replace a different stone of yours on the board to neutral stone'),
     read_digit_bounds(1, 2, Choice),
-    retrieve_move_menu_next(Choice, Move, Gamestate).
+    retrieve_move_menu_next(Choice, Gamestate, Move).
 
-retrieve_move_menu_next(1, Move, Gamestate) :- first_move_menu(Gamestate, Move).
+retrieve_move_menu_next(1, Gamestate, Move) :- first_move_menu(Gamestate, Move).
 
 retrieve_move_menu_next(2, Move), Gamestate :- second_move_menu(Gamestate, Move).
 
@@ -97,28 +100,23 @@ first_move_menu(Gamestate, Move):-
     read_row_bounds(1, MaxColumnRowDigit, RowNumber),
     format('Chosen coordinates: ~s~d', [ColumnChar, RowNumber]), newLine,
     Move_1 = pair(pair(RowNumber - 1, ColumnNumber - 1), Player),
-
     write('Insert coordinates to place neutral stone'), newLine,
     write('Column '),
-
     read_column_bounds(1, MaxColumnRowDigit, ColumnNumber_2),
     digit_to_column(ColumnNumber_2, ColumnChar_2),
     write('Line: '),
     read_row_bounds(1, MaxColumnRowDigit, RowNumber_2),
     format('Chosen coordinates: ~s~d', [ColumnChar_2, RowNumber_2]), newLine,
-    Move_2 = pair(pair(RowNumber_2 - 1, ColumnNumber_2 - 1)),
+    Move_2 = pair(pair(RowNumber_2 - 1, ColumnNumber_2 - 1), 5),
     Move = [Move_1, Move_2],
-
     optionNewLine(1, 'Continue'),
     optionNewLine(2, 'Redo move chosen'),
-    read_digit_bounds(1,2, Choice),
-    first_move_menu_next(Choice, Gamestate, Move),
-    write('eheheh u are sure! \n').
+    read_digit_bounds(1, 2, Choice),
+    first_move_menu_next(Choice, Gamestate, Player, Move).
 
-first_move_menu_next(1, Gamestate, Move):- validate_move(Gamestate, Move).
+first_move_menu_next(1, Gamestate, Player, Move):- validate_move(1, Gamestate, Player, Move).
 
-first_move_menu_next(2, Gamestate, Move):- 
-    skip_line, 
+first_move_menu_next(2, Gamestate, Player, Move):- 
     first_move_menu(Gamestate, NewMove).
 
 
