@@ -80,9 +80,9 @@ get_tile(Row, Column, Board, Tile):-
 
 get_coordinates(Move, Row, Column).
 
-getCurrPlayer([Player|Board], Player).
+getCurrPlayer([Player,Board], Player).
 
-getCurrBoard([Player|Board], Board).
+getCurrBoard([Player,Board], Board).
 
 
 read_digit_bounds(LowerBound, UpperBound, Number):-
@@ -92,10 +92,8 @@ read_digit_bounds(LowerBound, UpperBound, Number):-
     Char == '\n',
     get_char(Char),
     inputToDigit(InputCode, Number),
-    format('number chosen is ~d',[Number]),
     newLine,
     (Number =< UpperBound, Number >= LowerBound),
-    format('number chosen is ~d',[Number]),
     newLine.
 read_digit_bounds(LowerBound, UpperBound, Number):-
     write('Not a valid number, try again\n'),
@@ -108,9 +106,7 @@ read_row_bounds(MinRow, MaxRow, RowNumber):-
     Char == '\n',
     get_char(Char),
     inputToDigit(RowCode, RowNumber),
-    format('~d ~d ~d \n', [MinRow, RowNumber, MaxRow]),
     (RowNumber =< MaxRow, RowNumber >= MinRow),
-    format('~d ~d ~d \n', [MinRow, RowNumber, MaxRow]),
     newLine.
 read_row_bounds(MinRow, MaxRow, RowNumber):-
     write('Not a valid row number, try again\n'),

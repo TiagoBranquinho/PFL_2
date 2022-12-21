@@ -86,7 +86,13 @@ retrieve_move_menu(Gamestate, Move) :-
 
 retrieve_move_menu_next(1, Gamestate, Move) :- first_move_menu(Gamestate, Move).
 
-retrieve_move_menu_next(2, Move), Gamestate :- second_move_menu(Gamestate, Move).
+retrieve_move_menu_next(2, Move, Gamestate) :- second_move_menu(Gamestate, Move).
+
+first_move_menu_next(1, Gamestate, Player, Move):- 
+    validate_move(1, Gamestate, Player, Move).
+
+first_move_menu_next(2, Gamestate, Player, Move):- 
+    first_move_menu(Gamestate, NewMove).
 
 first_move_menu(Gamestate, Move):- 
     write('Insert coordinates to place a stone of yours'), newLine,
@@ -94,31 +100,26 @@ first_move_menu(Gamestate, Move):-
     getCurrBoard(Gamestate, Board),
     getCurrPlayer(Gamestate, Player),
     length(Board, MaxColumnRowDigit),
-    read_column_bounds(1, MaxColumnRowDigit, ColumnNumber),
+    NewMax is MaxColumnRowDigit + 1,
+    read_column_bounds(1, NewMax, ColumnNumber),
     digit_to_column(ColumnNumber, ColumnChar),
     write('Line: '),
-    read_row_bounds(1, MaxColumnRowDigit, RowNumber),
+    read_row_bounds(1, NewMax, RowNumber),
     format('Chosen coordinates: ~s~d', [ColumnChar, RowNumber]), newLine,
-    Move_1 = pair(pair(RowNumber - 1, ColumnNumber - 1), Player),
     write('Insert coordinates to place neutral stone'), newLine,
     write('Column '),
-    read_column_bounds(1, MaxColumnRowDigit, ColumnNumber_2),
+    read_column_bounds(1, NewMax, ColumnNumber_2),
     digit_to_column(ColumnNumber_2, ColumnChar_2),
     write('Line: '),
-    read_row_bounds(1, MaxColumnRowDigit, RowNumber_2),
+    read_row_bounds(1, NewMax, RowNumber_2),
     format('Chosen coordinates: ~s~d', [ColumnChar_2, RowNumber_2]), newLine,
-    Move_2 = pair(pair(RowNumber_2 - 1, ColumnNumber_2 - 1), 5),
-    Move = [Move_1, Move_2],
+    /* Move_1 = pair(pair(RowNumber - 1, ColumnNumber - 1), Player),
+    Move_2 = pair(pair(RowNumber_2 - 1, ColumnNumber_2 - 1), 5), */
     optionNewLine(1, 'Continue'),
     optionNewLine(2, 'Redo move chosen'),
     read_digit_bounds(1, 2, Choice),
+    Move = [pair(pair(RowNumber - 1, ColumnNumber - 1), Player), pair(pair(RowNumber_2 - 1, ColumnNumber_2 - 1), 5)],
     first_move_menu_next(Choice, Gamestate, Player, Move).
-
-first_move_menu_next(1, Gamestate, Player, Move):- validate_move(1, Gamestate, Player, Move).
-
-first_move_menu_next(2, Gamestate, Player, Move):- 
-    first_move_menu(Gamestate, NewMove).
-
 
     
 
