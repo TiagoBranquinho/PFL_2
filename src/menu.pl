@@ -88,10 +88,10 @@ retrieve_move_menu_next(1, Gamestate, Move) :- first_move_menu(Gamestate, Move).
 
 retrieve_move_menu_next(2, Move, Gamestate) :- second_move_menu(Gamestate, Move).
 
-first_move_menu_next(1, Gamestate, Player, Move):- 
-    validate_move(1, Gamestate, Player, Move).
+first_move_menu_next(1, Gamestate, Move):- 
+    validate_move(1, Gamestate, Move).
 
-first_move_menu_next(2, Gamestate, Player, Move):- 
+first_move_menu_next(2, Gamestate, Move):- 
     first_move_menu(Gamestate, NewMove).
 
 first_move_menu(Gamestate, Move):- 
@@ -118,8 +118,10 @@ first_move_menu(Gamestate, Move):-
     optionNewLine(1, 'Continue'),
     optionNewLine(2, 'Redo move chosen'),
     read_digit_bounds(1, 2, Choice),
-    Move = [pair(pair(RowNumber - 1, ColumnNumber - 1), Player), pair(pair(RowNumber_2 - 1, ColumnNumber_2 - 1), 5)],
-    first_move_menu_next(Choice, Gamestate, Player, Move).
+    format('~d ~d ~d ~d \n', [RowNumber -1, ColumnNumber-1, RowNumber_2 -1, ColumnNumber_2-1]),
+    Move = [pair(pair(RowNumberAdjust, ColumnNumberAdjust), Player), pair(pair(RowNumber_2Adjust, ColumnNumber_2Adjust), 5)],
+    RowNumberAdjust is RowNumber - 1, RowNumber_2Adjust is RowNumber_2 - 1, ColumnNumberAdjust is ColumnNumber - 1, ColumnNumber_2Adjust is ColumnNumber_2 - 1,
+    first_move_menu_next(Choice, Gamestate, Move).
 
     
 

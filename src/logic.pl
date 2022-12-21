@@ -29,17 +29,19 @@ foo(H, [H|_]).
 foo(H, [_, T]):- foo(H,T).
 
 
-validate_move(1, Gamestate, Player, Move):- 
+validate_move(1, Gamestate, Move):- 
+    %Move2 = [pair(pair(0,0), 1), pair(pair(0,1),5)],
     getCurrBoard(Gamestate, Board),
+    getCurrPlayer(Gamestate, Player),
     valid_moves(1, 0, Board, Player, ListOfMovesAux),
     flatten_list(ListOfMovesAux, ListOfMoves),
     write('gatooo\n'),
     nth0(0, Move, Move_1),
     printmove(Move_1),
     print_valid_moves(ListOfMoves),
-    member(Move_1, ListOfMoves),
+    foo(Move_1, ListOfMoves),
     write('deu').
-validate_move(1, Gamestate, Player, Move):- 
+validate_move(1, Gamestate, Move):- 
     write('sheesh').
 
 
@@ -60,4 +62,4 @@ cao:-
                 [1,0]
                 ] 
         ], 
-        1, [pair(pair(0,0), 1)]).
+        [pair(pair(1,1), 1), pair(pair(0,1),5)]).
