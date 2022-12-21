@@ -78,12 +78,31 @@ get_tile(Row, Column, Board, Tile):-
     nth(Row, Board, SelectedRow),
     nth(Column, SelectedRow, Tile).
 
-get_coordinates(Move, Row, Column).
-
 getCurrPlayer([Player,Board], Player).
 
 getCurrBoard([Player,Board], Board).
 
+%checks if H is on list
+foo(H, [H|_]).
+foo(H, [_, T]):- foo(H,T).
+
+%delete element from list
+deleted(X, [H|L1], [H|L2]) :- X\=H, !, deleted(X,L1,L2).
+deleted(X, [X|L1],    L2)  :-       !, deleted(X,L1,L2).
+deleted(_, [], []).
+
+
+print_valid_moves([]):- newLine.
+
+print_valid_moves([H|T]):- 
+    printmove(H), print_valid_moves(T).
+
+printmove(pair(pair(X,Y), P)):- 
+    format('Valid move: x ~d y ~d p ~d\n', [X,Y,P]).
+
+get_move_coordinates(pair(pair(X,Y), P), X, Y).
+
+construct_move(X, Y, P, pair(pair(X,Y), P)).
 
 read_digit_bounds(LowerBound, UpperBound, Number):-
     format('Choose an Action (~d-~d): ', [LowerBound, UpperBound]),

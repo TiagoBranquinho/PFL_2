@@ -90,9 +90,13 @@ retrieve_move_menu_next(2, Move, Gamestate) :- second_move_menu(Gamestate, Move)
 
 first_move_menu_next(1, Gamestate, Move):- 
     validate_move(1, Gamestate, Move).
+    %move(Gamestate, Move, NewGameState).
 
 first_move_menu_next(2, Gamestate, Move):- 
     first_move_menu(Gamestate, NewMove).
+
+first_move_menu_next(3, Gamestate, Move):- 
+    retrieve_move_menu(Gamestate, NewMove).
 
 first_move_menu(Gamestate, Move):- 
     write('Insert coordinates to place a stone of yours'), newLine,
@@ -113,12 +117,10 @@ first_move_menu(Gamestate, Move):-
     write('Line: '),
     read_row_bounds(1, NewMax, RowNumber_2),
     format('Chosen coordinates: ~s~d', [ColumnChar_2, RowNumber_2]), newLine,
-    /* Move_1 = pair(pair(RowNumber - 1, ColumnNumber - 1), Player),
-    Move_2 = pair(pair(RowNumber_2 - 1, ColumnNumber_2 - 1), 5), */
     optionNewLine(1, 'Continue'),
     optionNewLine(2, 'Redo move chosen'),
-    read_digit_bounds(1, 2, Choice),
-    format('~d ~d ~d ~d \n', [RowNumber -1, ColumnNumber-1, RowNumber_2 -1, ColumnNumber_2-1]),
+    optionNewLine(3, 'Go back to choosing move type'),
+    read_digit_bounds(1, 3, Choice),
     Move = [pair(pair(RowNumberAdjust, ColumnNumberAdjust), Player), pair(pair(RowNumber_2Adjust, ColumnNumber_2Adjust), 5)],
     RowNumberAdjust is RowNumber - 1, RowNumber_2Adjust is RowNumber_2 - 1, ColumnNumberAdjust is ColumnNumber - 1, ColumnNumber_2Adjust is ColumnNumber_2 - 1,
     first_move_menu_next(Choice, Gamestate, Move).
