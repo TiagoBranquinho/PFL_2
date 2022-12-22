@@ -60,9 +60,13 @@ toDifficulty(1, 'Easy').
 toDifficulty(2, 'Hard').
 
 getPlayerName(1, 'Player 1').
+getPlayerChar(1, 1).
 getPlayerName(-1, 'Player 2').
+getPlayerChar(-1, 2).
 getPlayerName(2, 'Player 1').
+getPlayerChar(2, 1).
 getPlayerName(-2, 'Bot').
+getPlayerChar(1, 2).
 
 getPlayerType(1, 'Player').
 getPlayerType(-1, 'Player').
@@ -79,6 +83,10 @@ get_tile(Row, Column, Board, Tile):-
     nth(Column, SelectedRow, Tile).
 
 getCurrPlayer([Player,Board], Player).
+
+getCurrPlayerChar(Gamestate, PlayerChar):- 
+    getCurrPlayer(Gamestate, Player),
+    getPlayerChar(Player, PlayerChar).
 
 getCurrBoard([Player,Board], Board).
 

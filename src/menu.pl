@@ -92,16 +92,13 @@ first_move_menu_next(1, Gamestate, Move):-
     validate_move(1, Gamestate, Move).
 
 first_move_menu_next(2, Gamestate, Move):- 
-    first_move_menu(Gamestate, NewMove).
-
-first_move_menu_next(3, Gamestate, Move):- 
-    retrieve_move_menu(Gamestate, NewMove).
+    update_game(Gamestate).
 
 first_move_menu(Gamestate, Move):- 
     write('Insert coordinates to place a stone of yours'), newLine,
     write('Column '),
     getCurrBoard(Gamestate, Board),
-    getCurrPlayer(Gamestate, Player),
+    getCurrPlayerChar(Gamestate, Player),
     length(Board, MaxColumnRowDigit),
     NewMax is MaxColumnRowDigit + 1,
     read_column_bounds(1, NewMax, ColumnNumber),
@@ -118,7 +115,6 @@ first_move_menu(Gamestate, Move):-
     format('Chosen coordinates: ~s~d', [ColumnChar_2, RowNumber_2]), newLine,
     optionNewLine(1, 'Continue'),
     optionNewLine(2, 'Redo move chosen'),
-    optionNewLine(3, 'Go back to choosing move type'),
     read_digit_bounds(1, 3, Choice),
     Move = [pair(pair(RowNumberAdjust, ColumnNumberAdjust), Player), pair(pair(RowNumber_2Adjust, ColumnNumber_2Adjust), 5)],
     RowNumberAdjust is RowNumber - 1, RowNumber_2Adjust is RowNumber_2 - 1, ColumnNumberAdjust is ColumnNumber - 1, ColumnNumber_2Adjust is ColumnNumber_2 - 1,

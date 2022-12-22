@@ -20,35 +20,35 @@ valid_moves_aux(Row, Column, [H|T], Player, ListOfMoves):-
 
 
 
-validate_move(_, _, []).
-
 validate_move(1, Gamestate, Move):- 
+    write('entrou meu filho\n'),
     getCurrBoard(Gamestate, Board),
-    getCurrPlayer(Gamestate, Player),
+    getCurrPlayerChar(Gamestate, Player),
     valid_moves(1, 0, Board, Player, ListOfMovesAux),
     flatten_list(ListOfMovesAux, ListOfMoves),
     nth0(0, Move, Move_1),
-    %printmove(Move_1),
-    %print_valid_moves(ListOfMoves),
+    write('first move\n'),
+    printmove(Move_1),
+    write('list of moves 1\n'),
+    print_valid_moves(ListOfMoves),
     member(Move_1, ListOfMoves),
-    %write('First move approved'),
+    write('First move approved'),
     get_move_info(Move_1, Move_1_X, Move_1_Y, Move_1_P),
     construct_move(Move_1_X, Move_1_Y, Player, Move_1_1),
     construct_move(Move_1_X, Move_1_Y, 5, Move_1_2),
     deleted(Move_1_1, ListOfMoves, NewListOfMoves),
     deleted(Move_1_2, NewListOfMoves, FinalListOfMoves),
-    %print_valid_moves(FinalListOfMoves),
+    write('list of moves 2\n'),
+    print_valid_moves(FinalListOfMoves),
     nth0(1, Move, Move_2),
-    %printmove(Move_2),
-    member(Move_2, FinalListOfMoves).
-    %write('Second move approved').
+    write('second move\n'),
+    printmove(Move_2),
+    member(Move_2, FinalListOfMoves),
+    write('Second move approved').
 
-validate_move(1, Gamestate, [Move_1,Move_2]):- 
-    write('Your move wasnt approved!'), newLine,
-    optionNewLine(2, 'Redo move chosen'),
-    optionNewLine(3, 'Go back to choosing move type'),
-    read_digit_bounds(2, 3, Choice),
-    first_move_menu_next(Choice, Gamestate, NewMove).
+validate_move(1, Gamestate, Move):- 
+    newLine, newLine, write('Your move wasnt approved!'), newLine, newLine,
+    update_game(Gamestate).
 
 
 flatten_list([], []).
