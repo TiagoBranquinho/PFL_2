@@ -90,7 +90,6 @@ retrieve_move_menu_next(2, Move, Gamestate) :- second_move_menu(Gamestate, Move)
 
 first_move_menu_next(1, Gamestate, Move):- 
     validate_move(1, Gamestate, Move).
-    %move(Gamestate, Move, NewGameState).
 
 first_move_menu_next(2, Gamestate, Move):- 
     first_move_menu(Gamestate, NewMove).

@@ -100,7 +100,7 @@ print_valid_moves([H|T]):-
 printmove(pair(pair(X,Y), P)):- 
     format('Valid move: x ~d y ~d p ~d\n', [X,Y,P]).
 
-get_move_coordinates(pair(pair(X,Y), P), X, Y).
+get_move_info(pair(pair(X,Y), P), X, Y, P).
 
 construct_move(X, Y, P, pair(pair(X,Y), P)).
 
@@ -156,6 +156,13 @@ readInput :-
     get_char(Char),
     newLine.
 
+
+
+update_matrix(CurrMatrix, Row, Column, Value, UpdatedMatrix) :-
+    nth0(Row, CurrMatrix, CurrentRow, TempMatrix),
+    nth0(Column, CurrentRow, _, Rt),
+    nth0(Column, UpdatedRow, Value, Rt),
+    nth0(Row, UpdatedMatrix, UpdatedRow, TempMatrix).
 
 /* 
 consult('src/main.pl'). 

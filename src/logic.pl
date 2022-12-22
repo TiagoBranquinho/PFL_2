@@ -32,7 +32,7 @@ validate_move(1, Gamestate, Move):-
     %print_valid_moves(ListOfMoves),
     member(Move_1, ListOfMoves),
     %write('First move approved'),
-    get_move_coordinates(Move_1, Move_1_X, Move_1_Y),
+    get_move_info(Move_1, Move_1_X, Move_1_Y, Move_1_P),
     construct_move(Move_1_X, Move_1_Y, Player, Move_1_1),
     construct_move(Move_1_X, Move_1_Y, 5, Move_1_2),
     deleted(Move_1_1, ListOfMoves, NewListOfMoves),
@@ -60,7 +60,7 @@ flatten_list(Element, [Element]) :-
     \+ is_list(Element).
 
 
-cao:- 
+/* cao:- 
     validate_move(1, 
         [
             1,  [
@@ -68,4 +68,7 @@ cao:-
                 [1,0]
                 ] 
         ], 
-        [pair(pair(0,0), 1), pair(pair(1,1),5)]).
+        [pair(pair(0,0), 1), pair(pair(1,1),5)]). */
+
+
+
