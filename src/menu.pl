@@ -9,11 +9,12 @@ pvpMenu(BoardSizeOpt) :-
 
 pveMenu(BoardSizeOpt, DifficultyOpt) :-
     optionNewLine(1, 'PLAY'),
-    option(2, 'ADJUST DIFFICULTY'),
-    toDifficulty(BoardSizeOpt, BoardSize),
-    format('Current = ~d: ', [BoardSize]),
-    optionNewLine(2, 'GO BACK'),
-    read_digit_bounds(1, 3, Choice).
+    optionNewLine(2, 'ADJUST DIFFICULTY'),
+    optionNewLine(3, 'GO BACK'),
+    %toDifficulty(BoardSizeOpt, BoardSize),
+    %format('Current = ~d: ', [BoardSize]),
+    read_digit_bounds(1, 3, Choice),
+    pveMenuNext(Choice, BoardSizeOpt, DifficultyOpt).
 
 rulesMenu(BoardSizeOpt, DifficultyOpt) :-
     write('THE RULES ARE PRETTY SIMPLE\n\n'),
@@ -35,6 +36,24 @@ pvpMenuNext(1, BoardSizeOpt) :- %PLAY PVP
     update_game(Gamestate).
 
 pvpMenuNext(2, BoardSizeOpt) :-
+    menu(BoardSizeOpt, 1).
+
+pveMenuNext(1, BoardSizeOpt, DifficultyOpt) :- %PLAY PVE   
+initial_state(BoardSizeOpt, Gamestate),
+update_game(Gamestate).
+
+pveMenuNext(2, BoardSizeOpt, DifficultyOpt) :-
+    write('Choose your difficulty\n\n'),
+    optionNewLine(1, 'Easy'),
+    optionNewLine(2, 'Hard'),
+    read_digit_bounds(1, 2, Choice),
+    toDifficulty(Choice, NewDifficulty),
+    write('The new difficulty is'),
+    write($NewDifficulty),
+    write('\n\n'),
+    pveMenu(BoardSizeOpt, NewDifficulty).
+
+pveMenuNext(3, BoardSizeOpt, DifficultyOpt) :-
     menu(BoardSizeOpt, 1).
 
 rulesMenuNext(1, BoardSizeOpt, Difficulty) :- menu(BoardSizeOpt, Difficulty).
