@@ -168,9 +168,38 @@ readInput :-
 
 update_matrix(CurrMatrix, Row, Column, Value, UpdatedMatrix) :-
     nth0(Row, CurrMatrix, CurrentRow, TempMatrix),
-    nth0(Column, CurrentRow, _, Rt),
-    nth0(Column, UpdatedRow, Value, Rt),
+    nth0(Column, CurrentRow, _, RowTemp),
+    nth0(Column, UpdatedRow, Value, RowTemp),
     nth0(Row, UpdatedMatrix, UpdatedRow, TempMatrix).
+
+value(Gamestate, Value):- 
+    getCurrBoard(Gamestate, Board),
+    count_element_in_matrix(Board, 0, EmptyCount),
+    count_element_in_matrix(Board, 5, NeutralCount),
+    count_element_in_matrix(Board, 1, Player1Count),
+    count_element_in_matrix(Board, 2, Player2Count),
+    Value = [EmptyCount, NeutralCount, Player1Count, Player2Count].
+
+    
+
+count_element_in_matrix([], _, 0).
+count_element_in_matrix([CurrRow|NextRow], Element, Count) :-
+    count_element_in_row(CurrRow, Element, RowCount),
+    count_element(NextRow, Element, RemainingCount),
+    Count is RowCount + RemainingCount.
+
+count_element_in_row([], _, 0).
+count_element_in_row([Elem|Elems], Element, Count) :-
+    (   Elem = Element
+    ->  NewCount is 1
+    ;   NewCount is 0
+    ),
+    count_element_in_row(Elems, Element, RemainingCount),
+    Count is NewCount + RemainingCount.
+
+
+
+
 
 /* 
 consult('src/main.pl'). 

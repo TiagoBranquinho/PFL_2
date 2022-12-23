@@ -6,10 +6,10 @@ create_game_state(NewPlayer, NewBoard, [NewPlayer, NewBoard]).
 update_game(Gamestate) :- 
     display_game(Gamestate),
     retrieve_move(Gamestate, Move),
-    write('we are on play\n'),
+    %write('we are on play\n'),
     print_valid_moves(Move),
     move(Gamestate, Move, NewGamestate),
-    write('final final final print\n'),
+    %write('final final final print\n'),
     getCurrBoard(NewGamestate, Board),
     update_game(NewGamestate).
 
