@@ -42,7 +42,7 @@ pveMenuNext(1, BoardSizeOpt, DifficultyOpt) :- %PLAY PVE
 initial_state(BoardSizeOpt, Gamestate),
 update_game(Gamestate).
 
-pveMenuNext(2, BoardSizeOpt, DifficultyOpt) :-
+/* pveMenuNext(2, BoardSizeOpt, DifficultyOpt) :-
     write('Choose your difficulty\n\n'),
     optionNewLine(1, 'Easy'),
     optionNewLine(2, 'Hard'),
@@ -51,7 +51,7 @@ pveMenuNext(2, BoardSizeOpt, DifficultyOpt) :-
     write('The new difficulty is'),
     write($NewDifficulty),
     write('\n\n'),
-    pveMenu(BoardSizeOpt, NewDifficulty).
+    pveMenu(BoardSizeOpt, NewDifficulty). */
 
 pveMenuNext(3, BoardSizeOpt, DifficultyOpt) :-
     menu(BoardSizeOpt, 1).

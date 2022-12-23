@@ -73,23 +73,32 @@ display_game(Gamestate):-
     getCurrPlayer(Gamestate, Player),
     display_header(Player),
     getCurrBoard(Gamestate, Board),
-    display_board(Board).
+    display_board(Board, 0).
 
-display_board([]):-
+display_board([], _):-
     newLine.
 
-display_board([H|T]):- 
+display_board([H|T], X):- 
+    print_spaces(X),
     print_line(H),
-    display_board(T).
+    NewX is X + 1,
+    display_board(T, NewX).
+    
 
 print_line([]):- 
-    write(' |'),
+    write(' '),
     newLine.
 
 print_line([H|T]) :- 
     digitToOutput(H, Output),
-    write(' | '),
+    write('  '),
     put_code(Output),
     print_line(T).
 
 
+print_spaces(0) :- !.
+print_spaces(X) :-
+    X > 0,
+    format(' ~w', [' ']),
+    X1 is X - 1,
+    print_spaces(X1).
