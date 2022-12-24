@@ -43,12 +43,82 @@ validate_move(1, Gamestate, Move):-
     nth0(1, Move, Move_2),
     %write('second move\n'),
     printmove(Move_2),
-    member(Move_2, FinalListOfMoves),
+    member(Move_2, FinalListOfMoves).
     %write('Second move approved').
 
 validate_move(1, Gamestate, Move):- 
     newLine, newLine, write('Your move wasnt approved!'), newLine, newLine,
     update_game(Gamestate).
+
+
+
+
+
+
+
+valid_moves(2, _, [], _, []).
+
+valid_moves(2, Row, [CurrLine|NextLine], Player, [App|ListOfMoves]):- 
+    valid_moves_aux_2(Row, 0, CurrLine, Player, App),
+    NewRow is Row + 1,
+    valid_moves(2, NewRow, NextLine, Player, ListOfMoves).
+
+valid_moves_aux_2(_, _, [], _ , []).
+
+valid_moves_aux_2(Row, Column, [5|T], Player, [pair(pair(Row, Column), Player) | ListOfMoves]):- 
+    NewColumn is Column + 1,
+    valid_moves_aux_2(Row, NewColumn, T, Player, ListOfMoves).
+
+valid_moves_aux_2(Row, Column, [Player|T], Player, [pair(pair(Row, Column), 5) | ListOfMoves]):- 
+    NewColumn is Column + 1,
+    valid_moves_aux_2(Row, NewColumn, T, Player, ListOfMoves).
+
+valid_moves_aux_2(Row, Column, [H|T], Player, ListOfMoves):- 
+    NewColumn is Column + 1,
+    valid_moves_aux_2(Row, NewColumn, T, Player, ListOfMoves).
+
+
+
+
+validate_move(2, Gamestate, Move):- 
+    %write('entrou meu filho\n'),
+    getCurrBoard(Gamestate, Board),
+    getCurrPlayerChar(Gamestate, Player),
+    %write('oui\n'),
+    valid_moves(2, 0, Board, Player, ListOfMovesAux),
+    flatten_list(ListOfMovesAux, ListOfMoves),
+    nth0(0, Move, Move_1),
+    %write('first move\n'),
+    printmove(Move_1),
+    %write('list of moves 1\n'),
+    print_valid_moves(ListOfMoves),
+    member(Move_1, ListOfMoves),
+    %write('First move approved'),
+    deleted(Move_1, ListOfMoves, NewListOfMoves),
+    %write('list of moves 2\n'),
+    print_valid_moves(NewListOfMoves),
+    nth0(1, Move, Move_2),
+    %write('second move\n'),
+    printmove(Move_2),
+    member(Move_2, NewListOfMoves),
+    deleted(Move_2, NewListOfMoves, FinalListOfMoves),
+    %write('list of moves 3\n'),
+    print_valid_moves(FinalListOfMoves),
+    nth0(2, Move, Move_3),
+    %write('third move\n'),
+    printmove(Move_3),
+    member(Move_3, FinalListOfMoves).
+    %write('Second move approved').
+
+validate_move(2, Gamestate, Move):- 
+    newLine, newLine, write('Your move wasnt approved!'), newLine, newLine,
+    update_game(Gamestate).
+
+
+
+
+
+
 
 
 flatten_list([], []).

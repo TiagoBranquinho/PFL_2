@@ -7,7 +7,7 @@ update_game(Gamestate) :-
     display_game(Gamestate),
     retrieve_move(Gamestate, Move),
     %write('we are on play\n'),
-    print_valid_moves(Move),
+    %print_valid_moves(Move),
     move(Gamestate, Move, NewGamestate),
     %write('final final final print\n'),
     getCurrBoard(NewGamestate, Board),

@@ -105,7 +105,7 @@ retrieve_move_menu(Gamestate, Move) :-
 
 retrieve_move_menu_next(1, Gamestate, Move) :- first_move_menu(Gamestate, Move).
 
-retrieve_move_menu_next(2, Move, Gamestate) :- second_move_menu(Gamestate, Move).
+retrieve_move_menu_next(2, Gamestate, Move) :- second_move_menu(Gamestate, Move).
 
 first_move_menu_next(1, Gamestate, Move):- 
     validate_move(1, Gamestate, Move).
@@ -134,10 +134,50 @@ first_move_menu(Gamestate, Move):-
     format('Chosen coordinates: ~s~d', [ColumnChar_2, RowNumber_2]), newLine,
     optionNewLine(1, 'Continue'),
     optionNewLine(2, 'Redo move chosen'),
-    read_digit_bounds(1, 3, Choice),
+    read_digit_bounds(1, 2, Choice),
     Move = [pair(pair(RowNumberAdjust, ColumnNumberAdjust), Player), pair(pair(RowNumber_2Adjust, ColumnNumber_2Adjust), 5)],
     RowNumberAdjust is RowNumber - 1, RowNumber_2Adjust is RowNumber_2 - 1, ColumnNumberAdjust is ColumnNumber - 1, ColumnNumber_2Adjust is ColumnNumber_2 - 1,
     first_move_menu_next(Choice, Gamestate, Move).
+
+
+second_move_menu_next(1, Gamestate, Move):- 
+    validate_move(2, Gamestate, Move).
+
+second_move_menu_next(2, Gamestate, Move):- 
+    update_game(Gamestate).
+
+second_move_menu(Gamestate, Move):- 
+    write('Insert coordinates of neutral stone to replace with a stone of yours'), newLine,
+    write('Column '),
+    getCurrBoard(Gamestate, Board),
+    getCurrPlayerChar(Gamestate, Player),
+    length(Board, MaxColumnRowDigit),
+    NewMax is MaxColumnRowDigit + 1,
+    read_column_bounds(1, NewMax, ColumnNumber),
+    digit_to_column(ColumnNumber, ColumnChar),
+    write('Line: '),
+    read_row_bounds(1, NewMax, RowNumber),
+    format('Chosen coordinates: ~s~d', [ColumnChar, RowNumber]), newLine,
+    write('Insert coordinates of another neutral stone to replace with a stone of yours'), newLine,
+    write('Column '),
+    read_column_bounds(1, NewMax, ColumnNumber_2),
+    digit_to_column(ColumnNumber_2, ColumnChar_2),
+    write('Line: '),
+    read_row_bounds(1, NewMax, RowNumber_2),
+    format('Chosen coordinates: ~s~d', [ColumnChar_2, RowNumber_2]), newLine,
+    write('Insert coordinates of a stone of yours to replace with a neutral stone'), newLine,
+    write('Column '),
+    read_column_bounds(1, NewMax, ColumnNumber_3),
+    digit_to_column(ColumnNumber_3, ColumnChar_3),
+    write('Line: '),
+    read_row_bounds(1, NewMax, RowNumber_3),
+    format('Chosen coordinates: ~s~d', [ColumnChar_3, RowNumber_3]), newLine,
+    optionNewLine(1, 'Continue'),
+    optionNewLine(2, 'Redo move chosen'),
+    read_digit_bounds(1, 2, Choice),
+    Move = [pair(pair(RowNumberAdjust, ColumnNumberAdjust), Player), pair(pair(RowNumber_2Adjust, ColumnNumber_2Adjust), Player), pair(pair(RowNumber_3Adjust, ColumnNumber_3Adjust), 5)],
+    RowNumberAdjust is RowNumber - 1, RowNumber_2Adjust is RowNumber_2 - 1, RowNumber_3Adjust is RowNumber_3 - 1, ColumnNumberAdjust is ColumnNumber - 1, ColumnNumber_2Adjust is ColumnNumber_2 - 1, ColumnNumber_3Adjust is ColumnNumber_3 - 1,
+    second_move_menu_next(Choice, Gamestate, Move).
 
     
 

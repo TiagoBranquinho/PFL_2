@@ -66,7 +66,11 @@ getPlayerChar(-1, 2).
 getPlayerName(2, 'Player 1').
 getPlayerChar(2, 1).
 getPlayerName(-2, 'Bot').
-getPlayerChar(1, 2).
+getPlayerChar(-2, 2).
+getPlayerName(3, 'Bot 1').
+getPlayerChar(3, 1).
+getPlayerName(-3, 'Bot 2').
+getPlayerChar(-3, 2).
 
 getPlayerType(1, 'Player').
 getPlayerType(-1, 'Player').
@@ -185,7 +189,7 @@ value(Gamestate, Value):-
 count_element_in_matrix([], _, 0).
 count_element_in_matrix([CurrRow|NextRow], Element, Count) :-
     count_element_in_row(CurrRow, Element, RowCount),
-    count_element(NextRow, Element, RemainingCount),
+    count_element_in_matrix(NextRow, Element, RemainingCount),
     Count is RowCount + RemainingCount.
 
 count_element_in_row([], _, 0).
