@@ -8,4 +8,4 @@
 :-use_module(library(random)).
 
 play :-
-    menu(3,1).
+    menu(3).

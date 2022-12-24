@@ -74,7 +74,10 @@ getPlayerChar(-3, 2).
 
 getPlayerType(1, 'Player').
 getPlayerType(-1, 'Player').
-getPlayerType(2, 'Bot').
+getPlayerType(2, 'Player').
+getPlayerType(-2, 'Bot').
+getPlayerType(3, 'Bot').
+getPlayerType(-3, 'Bot').
 
 maxColumn(5, 'A').
 maxColumn(6, 'B').
@@ -82,17 +85,19 @@ maxColumn(7, 'C').
 maxColumn(8, 'D').
 maxColumn(9, 'E').
 
-get_tile(Row, Column, Board, Tile):- 
+/* get_tile(Row, Column, Board, Tile):- 
     nth(Row, Board, SelectedRow),
-    nth(Column, SelectedRow, Tile).
+    nth(Column, SelectedRow, Tile). */
 
-getCurrPlayer([Player,Board], Player).
+getCurrPlayer([Player, Difficulty, Board], Player).
 
 getCurrPlayerChar(Gamestate, PlayerChar):- 
     getCurrPlayer(Gamestate, Player),
     getPlayerChar(Player, PlayerChar).
 
-getCurrBoard([Player,Board], Board).
+getCurrBoard([Player, Difficulty, Board], Board).
+
+getCurrDifficulty([Player, Difficulty, Board], Difficulty).
 
 %checks if H is on list
 foo(H, [H|_]).

@@ -7,51 +7,47 @@ pvpMenu(BoardSizeOpt) :-
     read_digit_bounds(1, 2, Choice),
     pvpMenuNext(Choice, BoardSizeOpt).
 
-pveMenu(BoardSizeOpt, DifficultyOpt) :-
+pveMenu(BoardSizeOpt) :-
     optionNewLine(1, 'PLAY'),
-    optionNewLine(2, 'ADJUST DIFFICULTY'),
-    optionNewLine(3, 'GO BACK'),
+    optionNewLine(2, 'GO BACK'),
     %toDifficulty(BoardSizeOpt, BoardSize),
     %format('Current = ~d: ', [BoardSize]),
-    read_digit_bounds(1, 3, Choice),
-    pveMenuNext(Choice, BoardSizeOpt, DifficultyOpt).
+    read_digit_bounds(1, 2, Choice),
+    pveMenuNext(Choice, BoardSizeOpt).
 
 rulesMenu(BoardSizeOpt, DifficultyOpt) :-
     write('THE RULES ARE PRETTY SIMPLE\n\n'),
     readInput,
     menu(BoardSizeOpt, DifficultyOpt).
 
-mainMenuNext(1, BoardSizeOpt, Difficulty) :- pvpMenu(BoardSizeOpt).
+mainMenuNext(1, BoardSizeOpt) :- pvpMenu(BoardSizeOpt).
 
-mainMenuNext(2, BoardSizeOpt, Difficulty) :- pveMenu(BoardSizeOpt, Difficulty).
+mainMenuNext(2, BoardSizeOpt) :- pveMenu(BoardSizeOpt).
 
-mainMenuNext(3, BoardSizeOpt, Difficulty) :- rulesMenu(BoardSizeOpt, DifficultyOpt).
+mainMenuNext(3, BoardSizeOpt) :- rulesMenu(BoardSizeOpt).
 
-mainMenuNext(4, BoardSizeOpt, Difficulty) :- boardSizeMenu.
+mainMenuNext(4, BoardSizeOpt) :- boardSizeMenu.
 
-mainMenuNext(5, BoardSizeOpt, Difficulty) :- halt(0).
+mainMenuNext(5, BoardSizeOpt) :- halt(0).
 
 pvpMenuNext(1, BoardSizeOpt) :- %PLAY PVP   
-    initial_state(BoardSizeOpt, Gamestate),
+    initial_state(BoardSizeOpt, 0, Gamestate),
     update_game(Gamestate).
 
 pvpMenuNext(2, BoardSizeOpt) :-
     menu(BoardSizeOpt, 1).
 
-pveMenuNext(1, BoardSizeOpt, DifficultyOpt) :- %PLAY PVE   
-initial_state(BoardSizeOpt, Gamestate),
-update_game(Gamestate).
-
-/* pveMenuNext(2, BoardSizeOpt, DifficultyOpt) :-
+pveMenuNext(1, BoardSizeOpt) :- %PLAY PVE   
     write('Choose your difficulty\n\n'),
     optionNewLine(1, 'Easy'),
     optionNewLine(2, 'Hard'),
     read_digit_bounds(1, 2, Choice),
-    toDifficulty(Choice, NewDifficulty),
-    write('The new difficulty is'),
-    write($NewDifficulty),
-    write('\n\n'),
-    pveMenu(BoardSizeOpt, NewDifficulty). */
+    toDifficulty(Choice, Difficulty),
+    initial_state(BoardSizeOpt, Difficulty, Gamestate),
+    update_game(Gamestate).
+
+pveMenuNext(2, BoardSizeOpt) :-
+    menu(BoardSizeOpt).
 
 pveMenuNext(3, BoardSizeOpt, DifficultyOpt) :-
     menu(BoardSizeOpt, 1).
@@ -78,7 +74,7 @@ boardSizeMenu :-
     menu(BoardSizeOpt, Difficulty).
 
 
-menu(BoardSizeOpt, Difficulty):-
+menu(BoardSizeOpt):-
     menuHeaderText('WELCOME TO THE NEX GAME'),
     optionNewLine(1, 'PVP'),
     optionNewLine(2, 'PVE'),
@@ -89,7 +85,7 @@ menu(BoardSizeOpt, Difficulty):-
     newLine,
     optionNewLine(5, 'QUIT'),
     read_digit_bounds(1, 5, Choice),
-    mainMenuNext(Choice, BoardSizeOpt, Difficulty).
+    mainMenuNext(Choice, BoardSizeOpt).
 
 
 
