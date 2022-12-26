@@ -148,20 +148,29 @@ display_game(Gamestate):-
     value(Gamestate, Value),
     display_stats(Value),
     getCurrBoard(Gamestate, Board),
+    display_board_header(Board),
     display_board(Board, 0).
 
-display_board([], _):-
+display_board([], X):-
+    print_spaces(X),
+    write('  '),
+    print_digits(X),
     newLine.
 
 display_board([H|T], X):- 
     print_spaces(X),
+    write('2'),
     print_line(H),
     NewX is X + 1,
     display_board(T, NewX).
     
+display_board_header([H|T]):- 
+    write(' '),
+    print_header_line(H).
 
 print_line([]):- 
-    write(' '),
+    write('  '),
+    write('2'),
     newLine.
 
 print_line([H|T]) :- 
@@ -170,6 +179,15 @@ print_line([H|T]) :-
     put_code(Output),
     print_line(T).
 
+print_header_line([]):- 
+    write('   '),
+    newLine.
+
+print_header_line([H|T]) :- 
+    write('1'),
+    write('  '),
+    print_header_line(T).
+
 
 print_spaces(0) :- !.
 print_spaces(X) :-
@@ -177,3 +195,10 @@ print_spaces(X) :-
     format(' ~w', [' ']),
     X1 is X - 1,
     print_spaces(X1).
+
+print_digits(0) :- !.
+print_digits(X) :-
+    X > 0,
+    write(' 1 '),
+    X1 is X - 1,
+    print_digits(X1).
