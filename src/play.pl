@@ -15,8 +15,12 @@ update_game(Gamestate) :-
 
 
 retrieve_move(Gamestate, Move):- 
-    %choose_move(Gamestate, Difficulty, Move),
-    retrieve_move_menu(Gamestate, Move).
+    getCurrPlayer(Gamestate, Player),
+    getPlayerType(Player, Type),
+    getCurrDifficulty(Gamestate, Difficulty),
+    format('Type = ~s\n',[Type]),
+    format('Difficulty is ~d\n',[Difficulty]),
+    (Type == 'Player' -> retrieve_move_menu(Gamestate, Move) ; choose_move(Gamestate, Difficulty, Move)).
 
 
 move(Gamestate, [], Gamestate).

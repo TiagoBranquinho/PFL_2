@@ -215,3 +215,8 @@ consult('src/main.pl').
 */
 % play.
 
+pair_with_2(pair(pair(_,_),2)).
+
+pair_with_5(pair(pair(_,_),5)).
+
+pair_with_1(pair(pair(_,_),1)).
