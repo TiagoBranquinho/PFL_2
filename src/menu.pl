@@ -42,8 +42,7 @@ pveMenuNext(1, BoardSizeOpt) :- %PLAY PVE
     optionNewLine(1, 'Easy'),
     optionNewLine(2, 'Hard'),
     read_digit_bounds(1, 2, Choice),
-    toDifficulty(Choice, Difficulty),
-    initial_state(BoardSizeOpt, Difficulty, Gamestate),
+    initial_state(BoardSizeOpt, Choice, Gamestate),
     update_game(Gamestate).
 
 pveMenuNext(2, BoardSizeOpt) :-
