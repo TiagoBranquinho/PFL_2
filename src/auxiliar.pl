@@ -85,10 +85,6 @@ maxColumn(7, 'C').
 maxColumn(8, 'D').
 maxColumn(9, 'E').
 
-/* get_tile(Row, Column, Board, Tile):- 
-    nth(Row, Board, SelectedRow),
-    nth(Column, SelectedRow, Tile). */
-
 getCurrPlayer([Player, Difficulty, Board], Player).
 
 getCurrPlayerChar(Gamestate, PlayerChar):- 
@@ -98,10 +94,6 @@ getCurrPlayerChar(Gamestate, PlayerChar):-
 getCurrBoard([Player, Difficulty, Board], Board).
 
 getCurrDifficulty([Player, Difficulty, Board], Difficulty).
-
-%checks if H is on list
-foo(H, [H|_]).
-foo(H, [_, T]):- foo(H,T).
 
 %delete element from list
 deleted(X, [H|L1], [H|L2]) :- X\=H, !, deleted(X,L1,L2).
@@ -206,14 +198,6 @@ count_element_in_row([Elem|Elems], Element, Count) :-
     count_element_in_row(Elems, Element, RemainingCount),
     Count is NewCount + RemainingCount.
 
-
-
-
-
-/* 
-consult('src/main.pl'). 
-*/
-% play.
 
 pair_with_2(pair(pair(_,_),2)).
 
