@@ -129,17 +129,17 @@ flatten_list(Element, [Element]) :-
 
 choose_move(Gamestate, 1, Move):- 
     random(1, 3, N),
-    format('First random chosen is ~d \n',[N]),
+    %format('First random chosen is ~d \n',[N]),
     getCurrBoard(Gamestate, Board),
     getCurrPlayerChar(Gamestate, Player),
     valid_moves(1, 0, Board, Player, ListOfMovesAux1),
     flatten_list(ListOfMovesAux1, ListOfMoves1),
     valid_moves(2, 0, Board, Player, ListOfMovesAux2),
     flatten_list(ListOfMovesAux2, ListOfMoves2),
-    write('First Move can be in :\n'),
-    print_valid_moves(ListOfMoves1),
-    write('Second Move can be in :\n'),
-    print_valid_moves(ListOfMoves2),
+    %write('First Move can be in :\n'),
+    %print_valid_moves(ListOfMoves1),
+    %write('Second Move can be in :\n'),
+    %print_valid_moves(ListOfMoves2),
     ValidMoveList = [ListOfMoves1, ListOfMoves2],
     choose_move_aux(N, ValidMoveList, Move).
 
@@ -195,29 +195,29 @@ choose_move_aux(2, ValidMoveList, Move):-
     TypeChosen \= [],
     length(TypeChosen, Length),
     Length > 2,
-    write('Printing ValidMoveList1\n'),
-    print_valid_moves(TypeChosen),
+    %write('Printing ValidMoveList1\n'),
+    %print_valid_moves(TypeChosen),
     random(0, Length, FirstMoveIndex),
     nth0(FirstMoveIndex, TypeChosen, FirstMove),
 
-    write('Printing first move\n'),
-    printmove(FirstMove),
+    %write('Printing first move\n'),
+    %printmove(FirstMove),
     deleted(FirstMove, TypeChosen, NewTypeChosen),
 
     get_move_info(FirstMove, Move_1_X, Move_1_Y, Move_1_P),
 
     (Move_1_P == 5 -> exclude(pair_with_5, NewTypeChosen, NewNewTypeChosen); NewNewTypeChosen = NewTypeChosen),
 
-    write('Printing ValidMoveList after first move\n'),
-    print_valid_moves(NewNewTypeChosen),
+    %write('Printing ValidMoveList after first move\n'),
+    %print_valid_moves(NewNewTypeChosen),
 
     length(NewNewTypeChosen, NewLength),
     NewLength > 0,
     random(0, NewLength, SecondMoveIndex),
     nth0(SecondMoveIndex, NewNewTypeChosen, SecondMove),
 
-    write('Printing second move\n'),
-    printmove(SecondMove),
+    %write('Printing second move\n'),
+    %printmove(SecondMove),
     deleted(SecondMove, NewNewTypeChosen, NewNewNewTypeChosen),
 
     get_move_info(SecondMove, Move_2_X, Move_2_Y, Move_2_P),
@@ -229,20 +229,20 @@ choose_move_aux(2, ValidMoveList, Move):-
 
 
 
-    write('Printing ValidMoveList after second Move\n'),
-    print_valid_moves(NewNewNewNewTypeChosen),
+    %write('Printing ValidMoveList after second Move\n'),
+    %print_valid_moves(NewNewNewNewTypeChosen),
 
     length(NewNewNewNewTypeChosen, NewNewLength),
     NewNewLength > 0,
     random(0, NewNewLength, ThirdMoveIndex),
     nth0(ThirdMoveIndex, NewNewNewNewTypeChosen, ThirdMove),
-    write('Printing Third Move\n'),
-    printmove(ThirdMove),
+    %write('Printing Third Move\n'),
+    %printmove(ThirdMove),
     Move = [FirstMove, SecondMove, ThirdMove].
 
 
 choose_move_aux(2, ValidMoveList, Move):- 
-    write('Move type 2 was chosen but not possible, redirecting to move 1'),
+    %write('Move type 2 was chosen but not possible, redirecting to move 1'),
     choose_move_aux(1, ValidMoveList, Move).
 
 
