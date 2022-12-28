@@ -124,6 +124,46 @@ flatten_list(Element, [Element]) :-
     \+ is_list(Element).
 
 
+
+matrix_has_path_bottom(Board, Row, Col, Symbol, Path) :-
+    length(Board, Length),
+    NewLength is Length - 1,
+    Row =:= NewLength,
+    get_element_matrix(Board, Row, Col, SymbolFound),
+    SymbolFound = Symbol.
+
+matrix_has_path_bottom(Board, Row, Col, Symbol, Path) :-
+    get_element_matrix(Board, Row, Col, SymbolFound),
+    SymbolFound = Symbol,
+    length(Board, Length),
+    Row < Length, Col < Length, Row > -1, Col > -1,
+    \+ member((Row, Col), Path), % make sure the element has not been visited before
+    Up is Row - 1, Down is Row + 1, Left is Col - 1, Right is Col + 1,
+    (   matrix_has_path_bottom(Board, Up, Col, Symbol, [(Row, Col)|Path]) %up
+    ;   matrix_has_path_bottom(Board, Down, Col, Symbol, [(Row, Col)|Path]) %down
+    ;   matrix_has_path_bottom(Board, Row, Left, Symbol, [(Row, Col)|Path]) %left
+    ;   matrix_has_path_bottom(Board, Row, Right, Symbol, [(Row, Col)|Path]) %right
+    ;   matrix_has_path_bottom(Board, Up, Right, Symbol, [(Row, Col)|Path]) %upright
+    ;   matrix_has_path_bottom(Board, Down, Left, Symbol, [(Row, Col)|Path]) %downleft
+    ).
+    
+    
+matrix_has_path_top_bottom(Board, Symbol) :-
+    length(Board, Length),
+    nth0(0, Board, TopRow), % get the top row of the matrix
+    matrix_has_path_top_bottom(TopRow, 0, Board, Symbol).
+
+matrix_has_path_top_bottom([], _, _, _):- fail. % base case: end of top row
+matrix_has_path_top_bottom([Head|Tail], Col, Board, Symbol) :-
+    matrix_has_path_bottom(Board, 0, Col, Symbol, []). % check for a path from the current element to the bottom border % check the next element in the top row
+matrix_has_path_top_bottom([_|Tail], Col, Board, Symbol) :-
+    NewCol is Col + 1,
+    matrix_has_path_top_bottom(Tail, NewCol, Board, Symbol). % check the next element in the top row
+
+    
+
+
+
 % BOT-----------------------
 
 

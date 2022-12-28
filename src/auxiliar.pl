@@ -204,3 +204,7 @@ pair_with_2(pair(pair(_,_),2)).
 pair_with_5(pair(pair(_,_),5)).
 
 pair_with_1(pair(pair(_,_),1)).
+
+get_element_matrix(Matrix, Row, Col, Element) :-
+    nth0(Row, Matrix, RowList),
+    nth0(Col, RowList, Element).

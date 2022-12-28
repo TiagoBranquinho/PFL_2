@@ -3,6 +3,16 @@ switch_players(OldPlayer, NewPlayer):- NewPlayer is -1 * OldPlayer.
 create_game_state(NewPlayer, Difficulty, NewBoard, [NewPlayer, Difficulty, NewBoard]).
 
 
+update_game(Gamestate):- 
+    getCurrBoard(Gamestate, Board),
+    getCurrPlayer(Gamestate, Player),
+    switch_players(Player, LastPlayer),
+    format('Last player = ~d \n',[LastPlayer]),
+    matrix_has_path_top_bottom(Board, LastPlayer),
+    write('My frend has won the game!\n').
+
+
+
 update_game(Gamestate) :- 
     display_game(Gamestate),
     retrieve_move(Gamestate, Move),
@@ -10,7 +20,7 @@ update_game(Gamestate) :-
     %print_valid_moves(Move),
     move(Gamestate, Move, NewGamestate),
     %write('final final final print\n'),
-    getCurrBoard(NewGamestate, Board),
+    %getCurrBoard(NewGamestate, Board),
     update_game(NewGamestate).
 
 
