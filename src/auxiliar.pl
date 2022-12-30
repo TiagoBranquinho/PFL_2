@@ -85,15 +85,17 @@ maxColumn(7, 'C').
 maxColumn(8, 'D').
 maxColumn(9, 'E').
 
-getCurrPlayer([Player, Difficulty, Board], Player).
+getCurrPlayer([Player, Difficulty, Walls, Board], Player).
 
 getCurrPlayerChar(Gamestate, PlayerChar):- 
     getCurrPlayer(Gamestate, Player),
     getPlayerChar(Player, PlayerChar).
 
-getCurrBoard([Player, Difficulty, Board], Board).
+getCurrBoard([Player, Difficulty, Walls, Board], Board).
 
-getCurrDifficulty([Player, Difficulty, Board], Difficulty).
+getCurrDifficulty([Player, Difficulty, Walls, Board], Difficulty).
+
+getCurrWalls([Player, Difficulty, Walls, Board], Walls).
 
 %delete element from list
 deleted(X, [H|L1], [H|L2]) :- X\=H, !, deleted(X,L1,L2).
