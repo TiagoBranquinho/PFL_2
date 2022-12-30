@@ -24,18 +24,41 @@ mainMenuNext(1, BoardSizeOpt) :- pvpMenu(BoardSizeOpt).
 
 mainMenuNext(2, BoardSizeOpt) :- pveMenu(BoardSizeOpt).
 
-mainMenuNext(3, BoardSizeOpt) :- rulesMenu(BoardSizeOpt).
+mainMenuNext(3, BoardSizeOpt) :- botvbotMenu(BoardSizeOpt).
 
-mainMenuNext(4, BoardSizeOpt) :- boardSizeMenu.
+mainMenuNext(4, BoardSizeOpt) :- rulesMenu(BoardSizeOpt).
 
-mainMenuNext(5, BoardSizeOpt) :- halt(0).
+mainMenuNext(5, BoardSizeOpt) :- boardSizeMenu.
+
+mainMenuNext(6, BoardSizeOpt) :- halt(0).
+
+
+botvbotMenu(BoardSizeOpt):- 
+    optionNewLine(1, 'PLAY'),
+    optionNewLine(2, 'GO BACK'),
+    %toDifficulty(BoardSizeOpt, BoardSize),
+    %format('Current = ~d: ', [BoardSize]),
+    read_digit_bounds(1, 2, Choice),
+    botvbotMenuNext(Choice, BoardSizeOpt).
+
+
+botvbotMenuNext(1, BoardSizeOpt) :- %PLAY BOT VS BOT   
+write('Choose the difficulty\n\n'),
+optionNewLine(1, 'Easy'),
+optionNewLine(2, 'Hard'),
+read_digit_bounds(1, 2, Difficulty),
+initial_state(BoardSizeOpt, 3, Difficulty, Gamestate),
+update_game(Gamestate).
+
+botvbotMenuNext(2, BoardSizeOpt) :-
+    menu(BoardSizeOpt).
 
 pvpMenuNext(1, BoardSizeOpt) :- %PLAY PVP   
     initial_state(BoardSizeOpt, 1, 0, Gamestate),
     update_game(Gamestate).
 
 pvpMenuNext(2, BoardSizeOpt) :-
-    menu(BoardSizeOpt, 1).
+    menu(BoardSizeOpt).
 
 pveMenuNext(1, BoardSizeOpt) :- %PLAY PVE   
     write('Choose your difficulty\n\n'),
@@ -77,13 +100,14 @@ menu(BoardSizeOpt):-
     menuHeaderText('WELCOME TO THE NEX GAME'),
     optionNewLine(1, 'PVP'),
     optionNewLine(2, 'PVE'),
-    optionNewLine(3, 'RULES'),
-    option(4, 'ADJUST BOARD SIZE'),
+    optionNewLine(3, 'BOT vs BOT'),
+    optionNewLine(4, 'RULES'),
+    option(5, 'ADJUST BOARD SIZE'),
     toBoardSize(BoardSizeOpt, BoardSize),
     format(' (Current = ~d)', [BoardSize]),
     newLine,
-    optionNewLine(5, 'QUIT'),
-    read_digit_bounds(1, 5, Choice),
+    optionNewLine(6, 'QUIT'),
+    read_digit_bounds(1, 6, Choice),
     mainMenuNext(Choice, BoardSizeOpt).
 
 

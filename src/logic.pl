@@ -208,6 +208,8 @@ matrix_has_path_left_right([_|Tail], RowIndex, Board, Symbol) :-
 
 
 choose_move(Gamestate, 1, Move):- 
+    %write('Bot is chosing its move!\n')
+    %sleep(2),
     random(1, 3, N),
     %format('First random chosen is ~d \n',[N]),
     getCurrBoard(Gamestate, Board),

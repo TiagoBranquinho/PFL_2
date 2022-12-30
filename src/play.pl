@@ -22,11 +22,12 @@ game_over(Gamestate, Winner):-
     HorizontalWalls == LastPlayer,
     getCurrBoard(Gamestate, Board),
     matrix_has_path_left_right(Board, LastPlayer),
-    Winner = LastPlayerChar.
+    Winner = LastPlayer.
 
 update_game(Gamestate):-  %checking if someone won the game, if not, it will proceed to next predicate
     game_over(Gamestate, Winner),
-    format('My frend player ~d has won the game!',[Winner]), newLine,
+    getPlayerName(Winner, WinnerName),
+    format('My frend ~s has won the game!',[WinnerName]), newLine,
     write('This was the final board:'), newLine,
     getCurrBoard(Gamestate, Board),
     value(Gamestate, Value),
