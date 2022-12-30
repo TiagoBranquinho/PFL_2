@@ -6,11 +6,12 @@ create_game_state(NewPlayer, Difficulty, NewWalls, NewBoard, [NewPlayer, Difficu
 game_over(Gamestate, Winner):- 
     getCurrPlayer(Gamestate, Player),
     switch_players(Player, LastPlayer),
+    getPlayerChar(LastPlayer, LastPlayerChar),
     getCurrWalls(Gamestate, Walls),
     nth0(0, Walls, VerticalWalls),
-    VerticalWalls == LastPlayer,
+    VerticalWalls == LastPlayerChar,
     getCurrBoard(Gamestate, Board),
-    matrix_has_path_top_bottom(Board, LastPlayer),
+    matrix_has_path_top_bottom(Board, LastPlayerChar),
     Winner = LastPlayer.
 
 game_over(Gamestate, Winner):- 
@@ -21,7 +22,7 @@ game_over(Gamestate, Winner):-
     HorizontalWalls == LastPlayer,
     getCurrBoard(Gamestate, Board),
     matrix_has_path_left_right(Board, LastPlayer),
-    Winner = LastPlayer.
+    Winner = LastPlayerChar.
 
 update_game(Gamestate):-  %checking if someone won the game, if not, it will proceed to next predicate
     game_over(Gamestate, Winner),

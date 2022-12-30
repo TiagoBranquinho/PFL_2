@@ -1,5 +1,5 @@
-initial_state(1, Difficulty, [
-    2, Difficulty, [1,2],
+initial_state(1, Player, Difficulty, [
+    Player, Difficulty, [1,2],
     [
         [0,0,0,0,0],
         [0,0,0,0,0],
@@ -9,8 +9,8 @@ initial_state(1, Difficulty, [
     ]
 ]). 
 
-initial_state(2, Difficulty, [
-    2, Difficulty, [1,2],
+initial_state(2, Player, Difficulty, [
+    Player, Difficulty, [1,2],
     [
         [0,0,0,0,0,0],
         [0,0,0,0,0,0],
@@ -21,21 +21,21 @@ initial_state(2, Difficulty, [
     ]
 ]).
 
-initial_state(3, Difficulty, [
-    2, Difficulty, [1,2],
+initial_state(3, Player, Difficulty, [
+    Player, Difficulty, [1,2],
     [
-        [0,1,0,0,0,0,0],
-        [0,1,1,0,0,0,1],
-        [0,0,1,0,0,1,0],
-        [0,1,0,0,1,0,0],
-        [0,1,1,1,1,0,0],
-        [0,0,1,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0]
     ]
 ]).
 
-initial_state(4, Difficulty, [
-    2, Difficulty, [1,2],
+initial_state(4, Player, Difficulty, [
+    Player, Difficulty, [1,2],
     [
         [0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0],
@@ -48,8 +48,8 @@ initial_state(4, Difficulty, [
     ]
 ]).
 
-initial_state(5, Difficulty, [
-    2, Difficulty, [1,2],
+initial_state(5, Player, Difficulty, [
+    Player, Difficulty, [1,2],
     [
         [0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0],
