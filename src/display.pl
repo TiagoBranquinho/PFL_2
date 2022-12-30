@@ -81,6 +81,10 @@ display_game(Gamestate):-
     display_header(Player),
     value(Gamestate, Value),
     display_stats(Value),
+    getCurrWalls(Gamestate, Walls),
+    nth0(0, Walls, First),
+    nth0(1, Walls, Second),
+    format('Vertical ~d horizontal ~d\n',[First, Second]),
     getCurrBoard(Gamestate, Board),
     display_board_header(Board),
     display_board(Board, 0).

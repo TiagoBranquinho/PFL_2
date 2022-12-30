@@ -4,16 +4,22 @@ create_game_state(NewPlayer, Difficulty, NewWalls, NewBoard, [NewPlayer, Difficu
 
 
 game_over(Gamestate, Winner):- 
-    getCurrBoard(Gamestate, Board),
     getCurrPlayer(Gamestate, Player),
     switch_players(Player, LastPlayer),
+    getCurrWalls(Gamestate, Walls),
+    nth0(0, Walls, VerticalWalls),
+    VerticalWalls == LastPlayer,
+    getCurrBoard(Gamestate, Board),
     matrix_has_path_top_bottom(Board, LastPlayer),
     Winner = LastPlayer.
 
 game_over(Gamestate, Winner):- 
-    getCurrBoard(Gamestate, Board),
     getCurrPlayer(Gamestate, Player),
     switch_players(Player, LastPlayer),
+    getCurrWalls(Gamestate, Walls),
+    nth0(1, Walls, HorizontalWalls),
+    HorizontalWalls == LastPlayer,
+    getCurrBoard(Gamestate, Board),
     matrix_has_path_left_right(Board, LastPlayer),
     Winner = LastPlayer.
 
@@ -45,8 +51,8 @@ retrieve_move(Gamestate, Move):-
     getCurrPlayer(Gamestate, Player),
     getPlayerType(Player, Type),
     getCurrDifficulty(Gamestate, Difficulty),
-    format('Type = ~s\n',[Type]),
-    format('Difficulty is ~d\n',[Difficulty]),
+    %format('Type = ~s\n',[Type]),
+    %format('Difficulty is ~d\n',[Difficulty]),
     (Type == 'Player' -> retrieve_move_menu(Gamestate, Move) ; choose_move(Gamestate, Difficulty, Move)).
 
 

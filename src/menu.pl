@@ -87,8 +87,25 @@ menu(BoardSizeOpt):-
     mainMenuNext(Choice, BoardSizeOpt).
 
 
-
-
+/* retrieve_move_menu(Gamestate, Move) :-
+    getCurrPlayer(Gamestate, Player),
+    Player == 2,
+    value(Gamestate, Value),
+    getCurrBoard(Gamestate, Board),
+    length(Board, Length),
+    nth0(0, Value, EmptyCount),
+    EmptyCountNeeded is Length*Length - 2,
+    EmptyCount == EmptyCountNeeded,
+    write('Do you want to switch the outer walls? This is your only chance: '),
+    newLine, newLine,
+    optionNewLine(1, 'Yes'),
+    optionNewLine(2, 'No'),
+    read_digit_bounds(1, 2, Choice),
+    getCurrDifficulty(Gamestate, Difficulty),
+    getCurrWalls(Gamestate, Walls),
+    (Choice == 1 -> invertWalls(Walls, NewWalls); NewWalls = Walls),
+    create_game_state(Player, Difficulty, NewWalls, Board, NewGamestate),
+    update_game(NewGamestate). */
 
 retrieve_move_menu(Gamestate, Move) :-
     write('Choose your move'),
