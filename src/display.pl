@@ -86,43 +86,44 @@ display_game(Gamestate):-
     nth0(1, Walls, Second),
     format('Vertical ~d horizontal ~d\n',[First, Second]),
     getCurrBoard(Gamestate, Board),
-    display_board_header(Board),
-    display_board(Board, 0).
+    getCurrWalls(Gamestate, Walls),
+    display_board_header(Board, Walls),
+    display_board(Board, Walls, 0).
 
-display_board([], X):-
+display_board([], [VerticalWall, HorizontalWall],X):-
     print_spaces(X),
     write('  '),
     print_digits(X),
     newLine.
 
-display_board([H|T], X):- 
+display_board([H|T], [VerticalWall, HorizontalWall], X):- 
     print_spaces(X),
-    write('2'),
-    print_line(H),
+    format('~d',[HorizontalWall]),
+    print_line(H, VerticalWall),
     NewX is X + 1,
-    display_board(T, NewX).
+    display_board(T, [VerticalWall, HorizontalWall], NewX).
     
-display_board_header([H|T]):- 
+display_board_header([H|T], [VerticalWall, HorizontalWall]):- 
     write(' '),
-    print_header_line(H).
+    print_header_line(H, HorizontalWall).
 
-print_line([]):- 
+print_line([], VerticalWall):- 
     write('  '),
-    write('2'),
+    format('~d',[VerticalWall]),
     newLine.
 
-print_line([H|T]) :- 
+print_line([H|T], VerticalWall) :- 
     digitToOutput(H, Output),
     write('  '),
     put_code(Output),
-    print_line(T).
+    print_line(T, VerticalWall).
 
-print_header_line([]):- 
+print_header_line([], HorizontalWall):- 
     write('   '),
     newLine.
 
-print_header_line([H|T]) :- 
-    write('1'),
+print_header_line([H|T], HorizontalWall) :- 
+    format('~d',[HorizontalWall]),
     write('  '),
     print_header_line(T).
 
