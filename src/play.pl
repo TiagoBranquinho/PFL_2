@@ -3,15 +3,32 @@ switch_players(OldPlayer, NewPlayer):- NewPlayer is -1 * OldPlayer.
 create_game_state(NewPlayer, Difficulty, NewBoard, [NewPlayer, Difficulty, NewBoard]).
 
 
-update_game(Gamestate):- 
+game_over(Gamestate, Winner):- 
     getCurrBoard(Gamestate, Board),
     getCurrPlayer(Gamestate, Player),
     switch_players(Player, LastPlayer),
-    format('Last player = ~d \n',[LastPlayer]),
     matrix_has_path_top_bottom(Board, LastPlayer),
-    write('My frend has won the game!\n').
+    Winner = LastPlayer.
 
+game_over(Gamestate, Winner):- 
+    getCurrBoard(Gamestate, Board),
+    getCurrPlayer(Gamestate, Player),
+    switch_players(Player, LastPlayer),
+    matrix_has_path_left_right(Board, LastPlayer),
+    Winner = LastPlayer.
 
+update_game(Gamestate):-  %checking if someone won the game, if not, it will proceed to next predicate
+    game_over(Gamestate, Winner),
+    format('My frend player ~d has won the game!',[Winner]), newLine,
+    write('This was the final board:'), newLine,
+    getCurrBoard(Gamestate, Board),
+    value(Gamestate, Value),
+    display_stats(Value),
+    getCurrBoard(Gamestate, Board),
+    display_board_header(Board),
+    display_board(Board, 0),
+    readInput,
+    menu(3).
 
 update_game(Gamestate) :- 
     display_game(Gamestate),

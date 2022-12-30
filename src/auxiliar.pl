@@ -158,7 +158,7 @@ read_column_bounds(MinColumnCode, MaxColumnCode, ColumnNumber):-
 
 
 readInput :- 
-    write('Press any key to return to Main Menu... '),
+    write('Press any key and hit enter to return to Main Menu... '),
     get_code(Byte),
     peek_char(Char),
     Char == '\n',
