@@ -1,24 +1,16 @@
-menuHeaderText(Text) :- format('~n~`*t ~p ~`*t~57|~n', [Text]).
-
-
-pvpMenu(BoardSizeOpt) :-
-    optionNewLine(1, 'PLAY'),
-    optionNewLine(2, 'GO BACK'),
-    read_digit_bounds(1, 2, Choice),
-    pvpMenuNext(Choice, BoardSizeOpt).
-
-pveMenu(BoardSizeOpt) :-
-    optionNewLine(1, 'PLAY'),
-    optionNewLine(2, 'GO BACK'),
-    %toDifficulty(BoardSizeOpt, BoardSize),
-    %format('Current = ~d: ', [BoardSize]),
-    read_digit_bounds(1, 2, Choice),
-    pveMenuNext(Choice, BoardSizeOpt).
-
-rulesMenu(BoardSizeOpt, DifficultyOpt) :-
-    write('THE RULES ARE PRETTY SIMPLE\n\n'),
-    readInput,
-    menu(BoardSizeOpt, DifficultyOpt).
+menu(BoardSizeOpt):-
+    menuHeaderText('WELCOME TO THE NEX GAME'),
+    optionNewLine(1, 'PVP'),
+    optionNewLine(2, 'PVE'),
+    optionNewLine(3, 'BOT vs BOT'),
+    optionNewLine(4, 'RULES'),
+    option(5, 'ADJUST BOARD SIZE'),
+    toBoardSize(BoardSizeOpt, BoardSize),
+    format(' (Current = ~d)', [BoardSize]),
+    newLine,
+    optionNewLine(6, 'QUIT'),
+    read_digit_bounds(1, 6, Choice),
+    mainMenuNext(Choice, BoardSizeOpt).
 
 mainMenuNext(1, BoardSizeOpt) :- pvpMenu(BoardSizeOpt).
 
@@ -31,6 +23,38 @@ mainMenuNext(4, BoardSizeOpt) :- rulesMenu(BoardSizeOpt).
 mainMenuNext(5, BoardSizeOpt) :- boardSizeMenu.
 
 mainMenuNext(6, BoardSizeOpt) :- halt(0).
+
+pvpMenu(BoardSizeOpt) :-
+    optionNewLine(1, 'PLAY'),
+    optionNewLine(2, 'GO BACK'),
+    read_digit_bounds(1, 2, Choice),
+    pvpMenuNext(Choice, BoardSizeOpt).
+
+pvpMenuNext(1, BoardSizeOpt) :- %PLAY PVP   
+    initial_state(BoardSizeOpt, 1, 0, Gamestate),
+    update_game(Gamestate).
+
+pvpMenuNext(2, BoardSizeOpt) :-
+    menu(BoardSizeOpt).
+
+pveMenu(BoardSizeOpt) :-
+    optionNewLine(1, 'PLAY'),
+    optionNewLine(2, 'GO BACK'),
+    %toDifficulty(BoardSizeOpt, BoardSize),
+    %format('Current = ~d: ', [BoardSize]),
+    read_digit_bounds(1, 2, Choice),
+    pveMenuNext(Choice, BoardSizeOpt).
+
+pveMenuNext(1, BoardSizeOpt) :- %PLAY PVE   
+    write('Choose your difficulty\n\n'),
+    optionNewLine(1, 'Easy'),
+    optionNewLine(2, 'Hard'),
+    read_digit_bounds(1, 2, Difficulty),
+    initial_state(BoardSizeOpt, 2, Difficulty, Gamestate),
+    update_game(Gamestate).
+
+pveMenuNext(2, BoardSizeOpt) :-
+    menu(BoardSizeOpt).
 
 
 botvbotMenu(BoardSizeOpt):- 
@@ -53,76 +77,40 @@ update_game(Gamestate).
 botvbotMenuNext(2, BoardSizeOpt) :-
     menu(BoardSizeOpt).
 
-pvpMenuNext(1, BoardSizeOpt) :- %PLAY PVP   
-    initial_state(BoardSizeOpt, 1, 0, Gamestate),
-    update_game(Gamestate).
-
-pvpMenuNext(2, BoardSizeOpt) :-
+rulesMenu(BoardSizeOpt) :-
+    write('The objective of Nex is to create a connected chain of a player\'s stones linking the opposite edges of the board marked by the player\'s number.'), newLine,
+    write('You can execute 2 types of moves:'), newLine,
+    optionNewLine(1, 'Place a stone AND a neutral one on empty cells'),
+    optionNewLine(2, 'Replace two neutral stones with your stones AND replace a different stone of yours on the board to neutral stone'),
+    write('Also Player 2, in his first move, has the possibility to switch walls with Player 1'), newLine,
+    write('1 - Player 1\'s tile  2 - 2 - Player 2\'s tile  5 - Neutral tile  0 - Empty tile'), newLine,
+    readInput,
     menu(BoardSizeOpt).
-
-pveMenuNext(1, BoardSizeOpt) :- %PLAY PVE   
-    write('Choose your difficulty\n\n'),
-    optionNewLine(1, 'Easy'),
-    optionNewLine(2, 'Hard'),
-    read_digit_bounds(1, 2, Difficulty),
-    initial_state(BoardSizeOpt, 2, Difficulty, Gamestate),
-    update_game(Gamestate).
-
-pveMenuNext(2, BoardSizeOpt) :-
-    menu(BoardSizeOpt).
-
-pveMenuNext(3, BoardSizeOpt, DifficultyOpt) :-
-    menu(BoardSizeOpt, 1).
-
-rulesMenuNext(1, BoardSizeOpt, Difficulty) :- menu(BoardSizeOpt, Difficulty).
-
-newLine :- write('\n').
-
-optionNewLine(Number, Text) :-
-    option(Number, Text),
-    newLine.
-
-option(Number, Text) :-
-    format('~d - ~s', [Number, Text]).
 
 boardSizeMenu :- 
-    optionNewLine(1, '7x7'),
-    optionNewLine(2, '9x9'),
-    optionNewLine(3, '11x11'),
-    optionNewLine(4, '13x13'),
-    read_digit_bounds(1, 4, BoardSizeOpt),
+    optionNewLine(1, '5x5'),
+    optionNewLine(2, '6x6'),
+    optionNewLine(3, '7x7'),
+    optionNewLine(4, '8x8'),
+    optionNewLine(5, '9x9'),
+    read_digit_bounds(1, 5, BoardSizeOpt),
     toBoardSize(BoardSizeOpt, BoardSize),
     format('Board Size successfully changed to: ~d \n', [BoardSize]),
-    menu(BoardSizeOpt, Difficulty).
-
-
-menu(BoardSizeOpt):-
-    menuHeaderText('WELCOME TO THE NEX GAME'),
-    optionNewLine(1, 'PVP'),
-    optionNewLine(2, 'PVE'),
-    optionNewLine(3, 'BOT vs BOT'),
-    optionNewLine(4, 'RULES'),
-    option(5, 'ADJUST BOARD SIZE'),
-    toBoardSize(BoardSizeOpt, BoardSize),
-    format(' (Current = ~d)', [BoardSize]),
-    newLine,
-    optionNewLine(6, 'QUIT'),
-    read_digit_bounds(1, 6, Choice),
-    mainMenuNext(Choice, BoardSizeOpt).
+    menu(BoardSizeOpt).
 
 
 retrieve_move_menu(Gamestate, Move) :-
     getCurrWalls(Gamestate, Walls),
     Walls == [1,2],
     getCurrPlayer(Gamestate, Player),
-    format('current player is ~d \n',[Player]),
+    %format('current player is ~d \n',[Player]),
     Player == -1,
     value(Gamestate, Value),
     getCurrBoard(Gamestate, Board),
     length(Board, Length),
     nth0(0, Value, EmptyCount),
     EmptyCountNeeded is Length*Length - 2,
-    format('empty count ~d empty count needed ~d\n',[EmptyCount, EmptyCountNeeded]),
+    %format('empty count ~d empty count needed ~d\n',[EmptyCount, EmptyCountNeeded]),
     EmptyCount == EmptyCountNeeded,
     write('Do you want to switch the outer walls? This is your only chance: '),
     newLine, newLine,

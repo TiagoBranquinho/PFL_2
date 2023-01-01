@@ -1,3 +1,14 @@
+menuHeaderText(Text) :- format('~n~`*t ~p ~`*t~57|~n', [Text]).
+
+newLine :- write('\n').
+
+optionNewLine(Number, Text) :-
+    option(Number, Text),
+    newLine.
+
+option(Number, Text) :-
+    format('~d - ~s', [Number, Text]).
+
 initial_state(1, Player, Difficulty, [
     Player, Difficulty, [1,2],
     [
@@ -84,7 +95,7 @@ display_game(Gamestate):-
     getCurrWalls(Gamestate, Walls),
     nth0(0, Walls, First),
     nth0(1, Walls, Second),
-    format('Vertical ~d horizontal ~d\n',[First, Second]),
+    %format('Vertical ~d horizontal ~d\n',[First, Second]),
     getCurrBoard(Gamestate, Board),
     getCurrWalls(Gamestate, Walls),
     display_board_header(Board, Walls),
@@ -93,12 +104,12 @@ display_game(Gamestate):-
 display_board([], [VerticalWall, HorizontalWall],X):-
     print_spaces(X),
     write('  '),
-    print_digits(X),
+    print_digits(X, HorizontalWall),
     newLine.
 
 display_board([H|T], [VerticalWall, HorizontalWall], X):- 
     print_spaces(X),
-    format('~d',[HorizontalWall]),
+    format('~d',[VerticalWall]),
     print_line(H, VerticalWall),
     NewX is X + 1,
     display_board(T, [VerticalWall, HorizontalWall], NewX).
@@ -125,7 +136,7 @@ print_header_line([], HorizontalWall):-
 print_header_line([H|T], HorizontalWall) :- 
     format('~d',[HorizontalWall]),
     write('  '),
-    print_header_line(T).
+    print_header_line(T, HorizontalWall).
 
 
 print_spaces(0) :- !.
@@ -135,9 +146,9 @@ print_spaces(X) :-
     X1 is X - 1,
     print_spaces(X1).
 
-print_digits(0) :- !.
-print_digits(X) :-
+print_digits(0, HorizontalWall) :- !.
+print_digits(X, HorizontalWall) :-
     X > 0,
-    write(' 1 '),
+    format(' ~d ',[HorizontalWall]),
     X1 is X - 1,
-    print_digits(X1).
+    print_digits(X1, HorizontalWall).

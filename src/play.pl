@@ -27,7 +27,7 @@ game_over(Gamestate, Winner):-
 update_game(Gamestate):-  %checking if someone won the game, if not, it will proceed to next predicate
     game_over(Gamestate, Winner),
     getPlayerName(Winner, WinnerName),
-    format('My frend ~s has won the game!',[WinnerName]), newLine,
+    format('~s has won the game!',[WinnerName]), newLine,
     write('This was the final board:'), newLine,
     getCurrBoard(Gamestate, Board),
     value(Gamestate, Value),
