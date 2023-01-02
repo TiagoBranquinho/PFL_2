@@ -32,6 +32,8 @@ mainMenuNext(6, BoardSizeOpt) :- halt(0).
 % pvpMenu(+BoardSizeOpt)
 % Displays the player vs player menu
 pvpMenu(BoardSizeOpt) :-
+    clear,
+    menuHeaderText('PLAYER vs PLAYER MENU'),
     optionNewLine(1, 'PLAY'),
     optionNewLine(2, 'GO BACK'),
     read_digit_bounds(1, 2, Choice),
@@ -50,6 +52,8 @@ pvpMenuNext(2, BoardSizeOpt) :-
 % pveMenu(+BoardSizeOpt)
 % Displays the player vs bot menu
 pveMenu(BoardSizeOpt) :-
+    clear,
+    menuHeaderText('PLAYER vs BOT MENU'),
     optionNewLine(1, 'PLAY'),
     optionNewLine(2, 'GO BACK'),
     %toDifficulty(BoardSizeOpt, BoardSize),
@@ -73,6 +77,8 @@ pveMenuNext(2, BoardSizeOpt) :-
 % pveMenuNext(+Choice, +BoardSizeOpt)
 % Redirects to the next menu, according to the Choice. If the player wants to player, we will also need to chose the Difficulty
 botvbotMenu(BoardSizeOpt):- 
+    clear,
+    menuHeaderText('BOT vs BOT MENU'),
     optionNewLine(1, 'PLAY'),
     optionNewLine(2, 'GO BACK'),
     %toDifficulty(BoardSizeOpt, BoardSize),
@@ -97,6 +103,8 @@ botvbotMenuNext(2, BoardSizeOpt) :-
 % rulesMenu(+BoardSizeOpt)
 % Present the rules. Redirects to main menu after user entering any input
 rulesMenu(BoardSizeOpt) :-
+    clear,
+    menuHeaderText('RULES MENU'),
     write('The objective of Nex is to create a connected chain of a player\'s stones linking the opposite edges of the board marked by the player\'s number.'), newLine,
     write('You can execute 2 types of moves:'), newLine,
     optionNewLine(1, 'Place a stone AND a neutral one on empty cells'),
@@ -109,6 +117,8 @@ rulesMenu(BoardSizeOpt) :-
 % boardSizeMneu(+BoardSizeOpt)
 % Menu where users can change the board size
 boardSizeMenu :- 
+    clear,
+    menuHeaderText('BOARD SIZE MENU'),
     optionNewLine(1, '5x5'),
     optionNewLine(2, '6x6'),
     optionNewLine(3, '7x7'),
@@ -169,18 +179,17 @@ first_move_menu(Gamestate, Move):-
     getCurrBoard(Gamestate, Board),
     getCurrPlayerChar(Gamestate, Player),
     length(Board, MaxColumnRowDigit),
-    NewMax is MaxColumnRowDigit + 1,
-    read_column_bounds(1, NewMax, ColumnNumber),
+    read_column_bounds(1, MaxColumnRowDigit, ColumnNumber),
     digit_to_column(ColumnNumber, ColumnChar),
     write('Line: '),
-    read_row_bounds(1, NewMax, RowNumber),
+    read_row_bounds(1, MaxColumnRowDigit, RowNumber),
     format('Chosen coordinates: ~s~d', [ColumnChar, RowNumber]), newLine,
     write('Insert coordinates to place neutral stone'), newLine,
     write('Column '),
-    read_column_bounds(1, NewMax, ColumnNumber_2),
+    read_column_bounds(1, MaxColumnRowDigit, ColumnNumber_2),
     digit_to_column(ColumnNumber_2, ColumnChar_2),
     write('Line: '),
-    read_row_bounds(1, NewMax, RowNumber_2),
+    read_row_bounds(1, MaxColumnRowDigit, RowNumber_2),
     format('Chosen coordinates: ~s~d', [ColumnChar_2, RowNumber_2]), newLine,
     optionNewLine(1, 'Continue'),
     optionNewLine(2, 'Redo move chosen'),

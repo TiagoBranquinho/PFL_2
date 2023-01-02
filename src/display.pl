@@ -2,6 +2,8 @@ menuHeaderText(Text) :- format('~n~`*t ~p ~`*t~57|~n', [Text]).
 
 newLine :- write('\n').
 
+clear :- write('\33\[2J').
+
 % optionNewLine(+Number, +Text)
 % Prints a menu option in the format "Number - Text"
 optionNewLine(Number, Text) :-

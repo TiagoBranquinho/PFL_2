@@ -16,7 +16,7 @@ game_over(Gamestate, Winner):-
     nth0(0, Walls, VerticalWalls),
     VerticalWalls == LastPlayerChar,
     getCurrBoard(Gamestate, Board),
-    matrix_has_path_top_bottom(Board, LastPlayerChar),
+    matrix_has_path_left_right(Board, LastPlayerChar),
     Winner = LastPlayer.
 
 game_over(Gamestate, Winner):- 
@@ -26,12 +26,13 @@ game_over(Gamestate, Winner):-
     nth0(1, Walls, HorizontalWalls),
     HorizontalWalls == LastPlayer,
     getCurrBoard(Gamestate, Board),
-    matrix_has_path_left_right(Board, LastPlayer),
+    matrix_has_path_top_bottom(Board, LastPlayer),
     Winner = LastPlayer.
 
 % update_game(+Gamestate)
 % Game cycle. Checks for winners, displays the current player, stats, board, and retrieves and executes players' moves
 update_game(Gamestate):-  
+    clear,
     game_over(Gamestate, Winner), %checking if someone won the game, if not, it will proceed to next predicate
     getPlayerName(Winner, WinnerName),
     format('~s has won the game!',[WinnerName]), newLine,
@@ -40,8 +41,9 @@ update_game(Gamestate):-
     value(Gamestate, Value),
     display_stats(Value),
     getCurrBoard(Gamestate, Board),
-    display_board_header(Board),
-    display_board(Board, 0),
+    getCurrWalls(Gamestate, Walls),
+    display_board_header(Board, Walls),
+    display_board(Board, Walls, 0),
     readInput,
     menu(3).
 
