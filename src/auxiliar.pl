@@ -120,7 +120,11 @@ getCurrWalls([Player, Difficulty, Walls, Board], Walls).
 
 % invertWalls(+OLdWalls, -NewWalls)
 % Inverts outer walls of the board
-invertWalls([VerticalWalls, HorizontalWalls], [HorizontalWalls, VerticalWalls]).
+invertWalls([VerticalWalls, HorizontalWalls, InvertChoiceMade], [HorizontalWalls, VerticalWalls, InvertChoiceMade]).
+
+% getWallsInfo(+Walls, -VerticalWalls, -HorizontalWalls)
+% Gets Vertical and horizontal walls symbols
+getWallsInfo([VerticalWalls, HorizontalWalls, InvertChoiceMade], VerticalWalls, HorizontalWalls).
 
 % deleted(+Element, +InitialList, -FinalList)
 % Deletes an element from a list, if it exists

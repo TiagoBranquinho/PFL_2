@@ -124,7 +124,7 @@ boardSizeMenu :-
 % Menu where a player can chose his move type. Also if it is the first move of player 2, he can chose to invert the walls
 retrieve_move_menu(Gamestate, Move) :- % if its first move of player 2, invert walls and recall main cycle
     getCurrWalls(Gamestate, Walls),
-    Walls == [1,2],
+    Walls == [1,2,0],
     getCurrPlayer(Gamestate, Player),
     %format('current player is ~d \n',[Player]),
     Player == -1,
@@ -142,7 +142,9 @@ retrieve_move_menu(Gamestate, Move) :- % if its first move of player 2, invert w
     read_digit_bounds(1, 2, Choice),
     getCurrDifficulty(Gamestate, Difficulty),
     (Choice == 1 -> invertWalls(Walls, NewWalls); NewWalls = Walls),
-    create_game_state(Player, Difficulty, NewWalls, Board, NewGamestate),
+    getWallsInfo(NewWalls, VerticalWalls, HorizontalWalls),
+    FinalWalls = [VerticalWalls, HorizontalWalls, 1],
+    create_game_state(Player, Difficulty, FinalWalls, Board, NewGamestate),
     update_game(NewGamestate).
 
 retrieve_move_menu(Gamestate, Move) :-

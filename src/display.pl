@@ -13,9 +13,9 @@ option(Number, Text) :-
 
 
 % initial_state(+Size, +Player, +Difficulty, -Gamestate)
-% Constructs a Gamestate object, with the format [Player, Difficulty, Walls, Board], where the Size dictates the board's dimension
+% Constructs a Gamestate object, with the format [Player, Difficulty, Walls, Board], where the Size dictates the board's dimension and the Walls object is [HorizontalWalls, VerticalWalls, InvertChoiceMade]. The last element indicates whether the player 2 chose what to do regarding wall inversion
 initial_state(1, Player, Difficulty, [
-    Player, Difficulty, [1,2],
+    Player, Difficulty, [1,2,0],
     [
         [0,0,0,0,0],
         [0,0,0,0,0],
@@ -26,7 +26,7 @@ initial_state(1, Player, Difficulty, [
 ]). 
 
 initial_state(2, Player, Difficulty, [
-    Player, Difficulty, [1,2],
+    Player, Difficulty, [1,2,0],
     [
         [0,0,0,0,0,0],
         [0,0,0,0,0,0],
@@ -38,7 +38,7 @@ initial_state(2, Player, Difficulty, [
 ]).
 
 initial_state(3, Player, Difficulty, [
-    Player, Difficulty, [1,2],
+    Player, Difficulty, [1,2,0],
     [
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
@@ -51,7 +51,7 @@ initial_state(3, Player, Difficulty, [
 ]).
 
 initial_state(4, Player, Difficulty, [
-    Player, Difficulty, [1,2],
+    Player, Difficulty, [1,2,0],
     [
         [0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0],
@@ -65,7 +65,7 @@ initial_state(4, Player, Difficulty, [
 ]).
 
 initial_state(5, Player, Difficulty, [
-    Player, Difficulty, [1,2],
+    Player, Difficulty, [1,2,0],
     [
         [0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0],
@@ -103,7 +103,6 @@ display_game(Gamestate):-
     display_header(Player),
     value(Gamestate, Value),
     display_stats(Value),
-    getCurrWalls(Gamestate, Walls),
     %nth0(0, Walls, First),
     %nth0(1, Walls, Second),
     %format('Vertical ~d horizontal ~d\n',[First, Second]),
@@ -115,20 +114,20 @@ display_game(Gamestate):-
 
 % display_board(+Board, +Walls, +Number)
 % Prints the current board and walls, printing Number spaces (incremented) to achieve the required board shape
-display_board([], [VerticalWall, HorizontalWall],X):-
+display_board([], [VerticalWall, HorizontalWall, InvertChoiceMade],X):-
     print_spaces(X),
     write('  '),
     print_digits(X, HorizontalWall),
     newLine.
 
-display_board([H|T], [VerticalWall, HorizontalWall], X):- 
+display_board([H|T], [VerticalWall, HorizontalWall, InvertChoiceMade], X):- 
     print_spaces(X),
     format('~d',[VerticalWall]),
     print_line(H, VerticalWall),
     NewX is X + 1,
-    display_board(T, [VerticalWall, HorizontalWall], NewX).
+    display_board(T, [VerticalWall, HorizontalWall, InvertChoiceMade], NewX).
     
-display_board_header([H|T], [VerticalWall, HorizontalWall]):- 
+display_board_header([H|T], [VerticalWall, HorizontalWall, InvertChoiceMade]):- 
     write(' '),
     print_header_line(H, HorizontalWall).
 
