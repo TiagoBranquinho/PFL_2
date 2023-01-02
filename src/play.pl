@@ -1,8 +1,13 @@
+% switch_players(+OldPlayer, -NewPlayer)
+% Gets the next player to chose a move
 switch_players(OldPlayer, NewPlayer):- NewPlayer is -1 * OldPlayer.
 
+% create_game_state(+Player, +Difficulty, +Walls, +Board, -Gamestate)
+% Creates a Gamestate in the form [Player, Difficulty, Walls, Board]
 create_game_state(NewPlayer, Difficulty, NewWalls, NewBoard, [NewPlayer, Difficulty, NewWalls, NewBoard]).
 
-
+% game_over(+Gamestate, -Winner)
+% Checks if the game was ended according to the predicates to find paths and to the board's walls. If the game has ended, puts the player who won on Winner
 game_over(Gamestate, Winner):- 
     getCurrPlayer(Gamestate, Player),
     switch_players(Player, LastPlayer),
@@ -24,8 +29,10 @@ game_over(Gamestate, Winner):-
     matrix_has_path_left_right(Board, LastPlayer),
     Winner = LastPlayer.
 
-update_game(Gamestate):-  %checking if someone won the game, if not, it will proceed to next predicate
-    game_over(Gamestate, Winner),
+% update_game(+Gamestate)
+% Game cycle. Checks for winners, displays the current player, stats, board, and retrieves and executes players' moves
+update_game(Gamestate):-  
+    game_over(Gamestate, Winner), %checking if someone won the game, if not, it will proceed to next predicate
     getPlayerName(Winner, WinnerName),
     format('~s has won the game!',[WinnerName]), newLine,
     write('This was the final board:'), newLine,
@@ -48,7 +55,8 @@ update_game(Gamestate) :-
     %getCurrBoard(NewGamestate, Board),
     update_game(NewGamestate).
 
-
+% retrieve_move(+Gamestate, -Move)
+% Selects a valid Move, either from the player of from the bot
 retrieve_move(Gamestate, Move):- 
     getCurrPlayer(Gamestate, Player),
     getPlayerType(Player, Type),
@@ -57,7 +65,8 @@ retrieve_move(Gamestate, Move):-
     %format('Difficulty is ~d\n',[Difficulty]),
     (Type == 'Player' -> retrieve_move_menu(Gamestate, Move) ; choose_move(Gamestate, Difficulty, Move)).
 
-
+% move(+Gamestate, +Move, -NewGamestate)
+% Executes valid moves from the Move list, changing the Gamestate accordingly (saving the new one in NewGamestate)
 move(Gamestate, [], Gamestate).
 
 move(Gamestate, [CurrMove|NextMove], NewGamestate):- 

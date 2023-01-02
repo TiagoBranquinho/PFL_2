@@ -1,3 +1,5 @@
+% menu(+BoardSizeOpt)
+% Displays main menu, where we can play, access the rules, or adjust the BoardSize
 menu(BoardSizeOpt):-
     menuHeaderText('WELCOME TO THE NEX GAME'),
     optionNewLine(1, 'PVP'),
@@ -12,6 +14,8 @@ menu(BoardSizeOpt):-
     read_digit_bounds(1, 6, Choice),
     mainMenuNext(Choice, BoardSizeOpt).
 
+% mainMenuNext(+Choice, +BoardSizeOpt)
+% Redirects to the next menu, according to the Choice
 mainMenuNext(1, BoardSizeOpt) :- pvpMenu(BoardSizeOpt).
 
 mainMenuNext(2, BoardSizeOpt) :- pveMenu(BoardSizeOpt).
@@ -24,12 +28,18 @@ mainMenuNext(5, BoardSizeOpt) :- boardSizeMenu.
 
 mainMenuNext(6, BoardSizeOpt) :- halt(0).
 
+
+% pvpMenu(+BoardSizeOpt)
+% Displays the player vs player menu
 pvpMenu(BoardSizeOpt) :-
     optionNewLine(1, 'PLAY'),
     optionNewLine(2, 'GO BACK'),
     read_digit_bounds(1, 2, Choice),
     pvpMenuNext(Choice, BoardSizeOpt).
 
+
+% pvpMenuNext(+Choice, +BoardSizeOpt)
+% Redirects to the next menu, according to the Choice
 pvpMenuNext(1, BoardSizeOpt) :- %PLAY PVP   
     initial_state(BoardSizeOpt, 1, 0, Gamestate),
     update_game(Gamestate).
@@ -37,6 +47,8 @@ pvpMenuNext(1, BoardSizeOpt) :- %PLAY PVP
 pvpMenuNext(2, BoardSizeOpt) :-
     menu(BoardSizeOpt).
 
+% pveMenu(+BoardSizeOpt)
+% Displays the player vs bot menu
 pveMenu(BoardSizeOpt) :-
     optionNewLine(1, 'PLAY'),
     optionNewLine(2, 'GO BACK'),
@@ -45,6 +57,8 @@ pveMenu(BoardSizeOpt) :-
     read_digit_bounds(1, 2, Choice),
     pveMenuNext(Choice, BoardSizeOpt).
 
+% pveMenuNext(+Choice, +BoardSizeOpt)
+% Redirects to the next menu, according to the Choice. If the player wants to play, we will also need to chose the Difficulty
 pveMenuNext(1, BoardSizeOpt) :- %PLAY PVE   
     write('Choose your difficulty\n\n'),
     optionNewLine(1, 'Easy'),
@@ -56,7 +70,8 @@ pveMenuNext(1, BoardSizeOpt) :- %PLAY PVE
 pveMenuNext(2, BoardSizeOpt) :-
     menu(BoardSizeOpt).
 
-
+% pveMenuNext(+Choice, +BoardSizeOpt)
+% Redirects to the next menu, according to the Choice. If the player wants to player, we will also need to chose the Difficulty
 botvbotMenu(BoardSizeOpt):- 
     optionNewLine(1, 'PLAY'),
     optionNewLine(2, 'GO BACK'),
@@ -65,7 +80,8 @@ botvbotMenu(BoardSizeOpt):-
     read_digit_bounds(1, 2, Choice),
     botvbotMenuNext(Choice, BoardSizeOpt).
 
-
+% botvbotMenuNext(+Choice, +BoardSizeOpt)
+% Redirects to the next menu, according to the Choice. If the player wants the game to start, we will also need to chose the Difficulty
 botvbotMenuNext(1, BoardSizeOpt) :- %PLAY BOT VS BOT   
 write('Choose the difficulty\n\n'),
 optionNewLine(1, 'Easy'),
@@ -77,6 +93,9 @@ update_game(Gamestate).
 botvbotMenuNext(2, BoardSizeOpt) :-
     menu(BoardSizeOpt).
 
+
+% rulesMenu(+BoardSizeOpt)
+% Present the rules. Redirects to main menu after user entering any input
 rulesMenu(BoardSizeOpt) :-
     write('The objective of Nex is to create a connected chain of a player\'s stones linking the opposite edges of the board marked by the player\'s number.'), newLine,
     write('You can execute 2 types of moves:'), newLine,
@@ -87,6 +106,8 @@ rulesMenu(BoardSizeOpt) :-
     readInput,
     menu(BoardSizeOpt).
 
+% boardSizeMneu(+BoardSizeOpt)
+% Menu where users can change the board size
 boardSizeMenu :- 
     optionNewLine(1, '5x5'),
     optionNewLine(2, '6x6'),
@@ -99,7 +120,9 @@ boardSizeMenu :-
     menu(BoardSizeOpt).
 
 
-retrieve_move_menu(Gamestate, Move) :-
+% retrieve_move_menu(+Gamestate, -Move)
+% Menu where a player can chose his move type. Also if it is the first move of player 2, he can chose to invert the walls
+retrieve_move_menu(Gamestate, Move) :- % if its first move of player 2, invert walls and recall main cycle
     getCurrWalls(Gamestate, Walls),
     Walls == [1,2],
     getCurrPlayer(Gamestate, Player),
@@ -130,16 +153,14 @@ retrieve_move_menu(Gamestate, Move) :-
     read_digit_bounds(1, 2, Choice),
     retrieve_move_menu_next(Choice, Gamestate, Move).
 
+% retrieve_move_menu_next(+Type, +Gamestate, -Move)
+% Redirects player to a menu to chose their move, according to its Type
 retrieve_move_menu_next(1, Gamestate, Move) :- first_move_menu(Gamestate, Move).
 
 retrieve_move_menu_next(2, Gamestate, Move) :- second_move_menu(Gamestate, Move).
 
-first_move_menu_next(1, Gamestate, Move):- 
-    validate_move(1, Gamestate, Move).
-
-first_move_menu_next(2, Gamestate, Move):- 
-    update_game(Gamestate).
-
+% first_move_menu(+Gamestate, -Move)
+% Reads and constructs a move of the first type (from user input)
 first_move_menu(Gamestate, Move):- 
     write('Insert coordinates to place a stone of yours'), newLine,
     write('Column '),
@@ -166,13 +187,16 @@ first_move_menu(Gamestate, Move):-
     RowNumberAdjust is RowNumber - 1, RowNumber_2Adjust is RowNumber_2 - 1, ColumnNumberAdjust is ColumnNumber - 1, ColumnNumber_2Adjust is ColumnNumber_2 - 1,
     first_move_menu_next(Choice, Gamestate, Move).
 
+% first_move_menu_next(+Choice, +Gamestate, -Move)
+% Either tries to validate the player's move or gives him the possibility to redo his move, depending on Choice
+first_move_menu_next(1, Gamestate, Move):- 
+    validate_move(1, Gamestate, Move).
 
-second_move_menu_next(1, Gamestate, Move):- 
-    validate_move(2, Gamestate, Move).
-
-second_move_menu_next(2, Gamestate, Move):- 
+first_move_menu_next(2, Gamestate, Move):- 
     update_game(Gamestate).
 
+% second_move_menu(+Gamestate, -Move)
+% Reads and constructs a move of the second type (from user input)
 second_move_menu(Gamestate, Move):- 
     write('Insert coordinates of neutral stone to replace with a stone of yours'), newLine,
     write('Column '),
@@ -206,6 +230,12 @@ second_move_menu(Gamestate, Move):-
     RowNumberAdjust is RowNumber - 1, RowNumber_2Adjust is RowNumber_2 - 1, RowNumber_3Adjust is RowNumber_3 - 1, ColumnNumberAdjust is ColumnNumber - 1, ColumnNumber_2Adjust is ColumnNumber_2 - 1, ColumnNumber_3Adjust is ColumnNumber_3 - 1,
     second_move_menu_next(Choice, Gamestate, Move).
 
-    
+% second_move_menu_next(+Choice, +Gamestate, -Move)
+% Either tries to validate the player's move or gives him the possibility to redo his move, depending on Choice
+second_move_menu_next(1, Gamestate, Move):- 
+    validate_move(2, Gamestate, Move).
+
+second_move_menu_next(2, Gamestate, Move):- 
+    update_game(Gamestate).
 
 

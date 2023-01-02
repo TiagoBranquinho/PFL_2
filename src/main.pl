@@ -1,3 +1,4 @@
+%imports and modules needed to run
 :- consult('logic.pl').
 :- consult('auxiliar.pl').
 :- consult('display.pl').
@@ -7,5 +8,7 @@
 :- use_module(library(system)).
 :- use_module(library(random)).
 
+%play
+%start predicate, which calls the main menu
 play :-
     menu(3).

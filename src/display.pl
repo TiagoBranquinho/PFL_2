@@ -2,6 +2,8 @@ menuHeaderText(Text) :- format('~n~`*t ~p ~`*t~57|~n', [Text]).
 
 newLine :- write('\n').
 
+% optionNewLine(+Number, +Text)
+% Prints a menu option in the format "Number - Text"
 optionNewLine(Number, Text) :-
     option(Number, Text),
     newLine.
@@ -9,6 +11,9 @@ optionNewLine(Number, Text) :-
 option(Number, Text) :-
     format('~d - ~s', [Number, Text]).
 
+
+% initial_state(+Size, +Player, +Difficulty, -Gamestate)
+% Constructs a Gamestate object, with the format [Player, Difficulty, Walls, Board], where the Size dictates the board's dimension
 initial_state(1, Player, Difficulty, [
     Player, Difficulty, [1,2],
     [
@@ -74,11 +79,15 @@ initial_state(5, Player, Difficulty, [
     ]
 ]).
 
+% display_header(+Player)
+% Prints which player's turn is
 display_header(Player):- 
     getPlayerName(Player, PlayerName),
     format('~s\'s turn\n', [PlayerName]),
     newLine.
 
+% display_stats(+Value)
+% Prints the current status of the board
 display_stats(Value):- 
     nth0(0, Value, EmptyCount),
     nth0(1, Value, NeutralCount),
@@ -87,20 +96,25 @@ display_stats(Value):-
     format('Tiles: Empty ~d Neutral ~d Player1 ~d Player2 ~d',[EmptyCount, NeutralCount, Player1Count, Player2Count]), newLine, newLine.
 
 
+% display_game(+Gamestate)
+% Prints the current player, the value and the board itself, including its walls
 display_game(Gamestate):- 
     getCurrPlayer(Gamestate, Player),
     display_header(Player),
     value(Gamestate, Value),
     display_stats(Value),
     getCurrWalls(Gamestate, Walls),
-    nth0(0, Walls, First),
-    nth0(1, Walls, Second),
+    %nth0(0, Walls, First),
+    %nth0(1, Walls, Second),
     %format('Vertical ~d horizontal ~d\n',[First, Second]),
     getCurrBoard(Gamestate, Board),
     getCurrWalls(Gamestate, Walls),
     display_board_header(Board, Walls),
     display_board(Board, Walls, 0).
 
+
+% display_board(+Board, +Walls, +Number)
+% Prints the current board and walls, printing Number spaces (incremented) to achieve the required board shape
 display_board([], [VerticalWall, HorizontalWall],X):-
     print_spaces(X),
     write('  '),
@@ -138,7 +152,8 @@ print_header_line([H|T], HorizontalWall) :-
     write('  '),
     print_header_line(T, HorizontalWall).
 
-
+% print_spaces(+Number)
+% Prints Number spaces
 print_spaces(0) :- !.
 print_spaces(X) :-
     X > 0,
@@ -146,6 +161,8 @@ print_spaces(X) :-
     X1 is X - 1,
     print_spaces(X1).
 
+% print_digits(+Number, +Digit)
+% Prints Digit Number times
 print_digits(0, HorizontalWall) :- !.
 print_digits(X, HorizontalWall) :-
     X > 0,
