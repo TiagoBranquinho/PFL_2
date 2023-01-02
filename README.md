@@ -446,3 +446,105 @@ A jogada do computador é escolhida pelo predicado `choose_move/3`, de acordo co
 Em primeiro lugar, é escolhido um número aleatório entre 1 e 2, de forma a que a primeira jogada que o bot tente realizar seja aleatória. Em seguida, o bot tenta realizar essa jogada, escolhendo aleatoriamente movimentos desta, à medida que vai modificando a nova lista de movimentos possiveis até obter uma jogada.
 
 Caso o tipo de jogada escolhido não seja possível o bot tentará realizar uma jogada do outro tipo.
+
+```prolog
+% choose_move(+Gamestate, +Difficulty, -Move)
+% Choses a valid move for the computer to execute, according to the Difficulty chosen
+choose_move(Gamestate, 1, Move):- 
+    sleep(1),
+    random(1, 3, N),
+    getCurrBoard(Gamestate, Board),
+    getCurrPlayerChar(Gamestate, Player),
+    valid_moves(1, 0, Board, Player, ListOfMovesAux1),
+    flatten_list(ListOfMovesAux1, ListOfMoves1),
+    valid_moves(2, 0, Board, Player, ListOfMovesAux2),
+    flatten_list(ListOfMovesAux2, ListOfMoves2),
+    ValidMoveList = [ListOfMoves1, ListOfMoves2],
+    choose_move_aux(N, ValidMoveList, 0, Move).
+
+% choose_move_aux(+Type, +ValidMoveList, +R, -Move)
+% Choses a valid move from the ValidMoveList for the computer to execute, according to the Type of move chosen. R represents if the current call is a "redirect" (if the predicate is being called because the other type of move can't be done)
+choose_move_aux(1, ValidMoveList, R, Move):- 
+    nth0(0, ValidMoveList, TypeChosen),
+    TypeChosen \= [],
+    length(TypeChosen, Length),
+    Length > 1,
+    random(0, Length, FirstMoveIndex),
+    nth0(FirstMoveIndex, TypeChosen, FirstMove),
+    get_move_info(FirstMove, Move_1_X, Move_1_Y, Move_1_P),
+    construct_move(Move_1_X, Move_1_Y, Move_1_P, MoveToRemove1),
+    construct_move(Move_1_X, Move_1_Y, 5, MoveToRemove2),
+    deleted(MoveToRemove1, TypeChosen, NewTypeChosen),
+    deleted(MoveToRemove2, NewTypeChosen, NewNewTypeChosen),
+    (Move_1_P == 2 -> exclude(pair_with_2, NewNewTypeChosen, FinalTypeChosen); true),
+    (Move_1_P == 1 -> exclude(pair_with_1, NewNewTypeChosen, FinalTypeChosen);true),
+    (Move_1_P == 5 -> exclude(pair_with_5, NewNewTypeChosen, FinalTypeChosen);true),
+    length(FinalTypeChosen, NewLength),
+    random(0, NewLength, SecondMoveIndex),
+    nth0(SecondMoveIndex, FinalTypeChosen, SecondMove),
+    Move = [FirstMove, SecondMove].
+
+% If it is impossible to execute a Move of this Type, try to execute a Move of another type
+choose_move_aux(1, ValidMoveList, R, Move):- 
+    nth0(1, ValidMoveList, TypeChosen),
+    length(TypeChosen, Length),
+    Length > 2, R == 0,
+    choose_move_aux(2, ValidMoveList, 1, Move).
+
+% If none of the Type are valid, ERROR
+choose_move_aux(1, ValidMoveList, R, Move):- 
+    newLine, write('The game has tied'), newLine,
+    readInput,
+    menu(3).
+
+choose_move_aux(2, ValidMoveList, R, Move):- 
+    nth0(1, ValidMoveList, TypeChosen),
+    TypeChosen \= [],
+    length(TypeChosen, Length),
+    Length > 2,
+    random(0, Length, FirstMoveIndex),
+    nth0(FirstMoveIndex, TypeChosen, FirstMove),
+    deleted(FirstMove, TypeChosen, NewTypeChosen),
+    get_move_info(FirstMove, Move_1_X, Move_1_Y, Move_1_P),
+    (Move_1_P == 5 -> exclude(pair_with_5, NewTypeChosen, NewNewTypeChosen); NewNewTypeChosen = NewTypeChosen),
+    length(NewNewTypeChosen, NewLength),
+    NewLength > 0,
+    random(0, NewLength, SecondMoveIndex),
+    nth0(SecondMoveIndex, NewNewTypeChosen, SecondMove),
+    deleted(SecondMove, NewNewTypeChosen, NewNewNewTypeChosen),
+    get_move_info(SecondMove, Move_2_X, Move_2_Y, Move_2_P),
+    (Move_2_P == 5 -> exclude(pair_with_5, NewNewNewTypeChosen, NewNewNewNewTypeChosen); true),
+    (Move_2_P == 2, Move_1_P == 2 -> exclude(pair_with_2, NewNewNewTypeChosen, NewNewNewNewTypeChosen); true),
+    (Move_2_P == 1, Move_1_P == 1 -> exclude(pair_with_1, NewNewNewTypeChosen, NewNewNewNewTypeChosen); true),
+    length(NewNewNewNewTypeChosen, NewNewLength),
+    NewNewLength > 0,
+    random(0, NewNewLength, ThirdMoveIndex),
+    nth0(ThirdMoveIndex, NewNewNewNewTypeChosen, ThirdMove),
+    Move = [FirstMove, SecondMove, ThirdMove].
+
+% Move type 2 was chosen but not possible, redirecting to move choosing a Move of Type 1
+choose_move_aux(2, ValidMoveList, R, Move):- 
+    R == 0,
+    choose_move_aux(1, ValidMoveList, 1, Move).
+
+% Move type 2 was chosen but not possible, redirecting to move choosing a Move of Type 1
+choose_move_aux(2, ValidMoveList, R, Move):- 
+    write('The game has tied'), newLine,
+    readInput,
+    menu(3).
+```
+
+### Conclusões
+
+Em relação às known issues, estamos conscientes que a forma de obter uma lista de jogadas válidas, e consequentemente a forma de obter a jogada do computador fácil, poderiam ter sido implmentadas de uma forma mais simples. Por outro lado, a dificuldade dificil não foi realizada.
+
+A parte visual é um aspeto que pode ser melhorado.
+
+No geral, após análise de outros jogos propostos, na nossa opinião, concluímos que se trata de um jogo de dificuldade mais elevada, pelo que estamos satisfeitos com o nosso trabalho
+
+As principais dificuldades foram a gestão de dois tipos diferentes de jogadas e a realização dos predicados que verificavam o final do jogo.
+
+### Bibliografia
+
+Para a realização deste trabalho consultamos a documentação do SWI Prolog (https://www.swi-prolog.org).
+

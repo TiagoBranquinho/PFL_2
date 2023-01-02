@@ -1,7 +1,8 @@
 menuHeaderText(Text) :- format('~n~`*t ~p ~`*t~57|~n', [Text]).
 
 newLine :- write('\n').
-
+%clear
+%clear the screen
 clear :- write('\33\[2J').
 
 % optionNewLine(+Number, +Text)

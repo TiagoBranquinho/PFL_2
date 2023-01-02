@@ -128,19 +128,16 @@ getWallsInfo([VerticalWalls, HorizontalWalls, InvertChoiceMade], VerticalWalls, 
 
 % deleted(+Element, +InitialList, -FinalList)
 % Deletes an element from a list, if it exists
-deleted(X, [H|L1], [H|L2]) :- X\=H, !, deleted(X,L1,L2).
-deleted(X, [X|L1],    L2)  :-       !, deleted(X,L1,L2).
+deleted(X, [H|L1], [H|L2]) :- 
+    X\=H,
+    !,
+    deleted(X,L1,L2).
+
+deleted(X, [X|L1], L2)  :- 
+    !, 
+    deleted(X,L1,L2).
+
 deleted(_, [], []).
-
-
-
-%print_valid_moves([]):- newLine.
-
-%print_valid_moves([H|T]):- 
-    %printmove(H), print_valid_moves(T).
-
-%printmove(pair(pair(X,Y), P)):- 
-    %format('Valid move: x ~d y ~d p ~d\n', [X,Y,P]).
 
 % get_move_info(+Move, -Row, -Col, Player)
 % Get the Row, Column and new Symbol of that Tile from a move

@@ -32,7 +32,7 @@ game_over(Gamestate, Winner):-
 % update_game(+Gamestate)
 % Game cycle. Checks for winners, displays the current player, stats, board, and retrieves and executes players' moves
 update_game(Gamestate):-  
-    clear,
+    %clear,
     game_over(Gamestate, Winner), %checking if someone won the game, if not, it will proceed to next predicate
     getPlayerName(Winner, WinnerName),
     format('~s has won the game!',[WinnerName]), newLine,
@@ -50,11 +50,7 @@ update_game(Gamestate):-
 update_game(Gamestate) :- 
     display_game(Gamestate),
     retrieve_move(Gamestate, Move),
-    %write('we are on play\n'),
-    %print_valid_moves(Move),
     move(Gamestate, Move, NewGamestate),
-    %write('final final final print\n'),
-    %getCurrBoard(NewGamestate, Board),
     update_game(NewGamestate).
 
 % retrieve_move(+Gamestate, -Move)
@@ -63,8 +59,6 @@ retrieve_move(Gamestate, Move):-
     getCurrPlayer(Gamestate, Player),
     getPlayerType(Player, Type),
     getCurrDifficulty(Gamestate, Difficulty),
-    %format('Type = ~s\n',[Type]),
-    %format('Difficulty is ~d\n',[Difficulty]),
     (Type == 'Player' -> retrieve_move_menu(Gamestate, Move) ; choose_move(Gamestate, Difficulty, Move)).
 
 % move(+Gamestate, +Move, -NewGamestate)

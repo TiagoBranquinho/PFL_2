@@ -1,6 +1,7 @@
 % menu(+BoardSizeOpt)
 % Displays main menu, where we can play, access the rules, or adjust the BoardSize
 menu(BoardSizeOpt):-
+    clear,
     menuHeaderText('WELCOME TO THE NEX GAME'),
     optionNewLine(1, 'PVP'),
     optionNewLine(2, 'PVE'),
@@ -56,8 +57,6 @@ pveMenu(BoardSizeOpt) :-
     menuHeaderText('PLAYER vs BOT MENU'),
     optionNewLine(1, 'PLAY'),
     optionNewLine(2, 'GO BACK'),
-    %toDifficulty(BoardSizeOpt, BoardSize),
-    %format('Current = ~d: ', [BoardSize]),
     read_digit_bounds(1, 2, Choice),
     pveMenuNext(Choice, BoardSizeOpt).
 
@@ -66,8 +65,7 @@ pveMenu(BoardSizeOpt) :-
 pveMenuNext(1, BoardSizeOpt) :- %PLAY PVE   
     write('Choose your difficulty\n\n'),
     optionNewLine(1, 'Easy'),
-    optionNewLine(2, 'Hard'),
-    read_digit_bounds(1, 2, Difficulty),
+    read_digit_bounds(1, 1, Difficulty),
     initial_state(BoardSizeOpt, 2, Difficulty, Gamestate),
     update_game(Gamestate).
 
@@ -81,8 +79,6 @@ botvbotMenu(BoardSizeOpt):-
     menuHeaderText('BOT vs BOT MENU'),
     optionNewLine(1, 'PLAY'),
     optionNewLine(2, 'GO BACK'),
-    %toDifficulty(BoardSizeOpt, BoardSize),
-    %format('Current = ~d: ', [BoardSize]),
     read_digit_bounds(1, 2, Choice),
     botvbotMenuNext(Choice, BoardSizeOpt).
 
@@ -91,8 +87,7 @@ botvbotMenu(BoardSizeOpt):-
 botvbotMenuNext(1, BoardSizeOpt) :- %PLAY BOT VS BOT   
 write('Choose the difficulty\n\n'),
 optionNewLine(1, 'Easy'),
-optionNewLine(2, 'Hard'),
-read_digit_bounds(1, 2, Difficulty),
+read_digit_bounds(1, 1, Difficulty),
 initial_state(BoardSizeOpt, 3, Difficulty, Gamestate),
 update_game(Gamestate).
 
@@ -104,7 +99,7 @@ botvbotMenuNext(2, BoardSizeOpt) :-
 % Present the rules. Redirects to main menu after user entering any input
 rulesMenu(BoardSizeOpt) :-
     clear,
-    menuHeaderText('RULES MENU'),newLine
+    menuHeaderText('RULES MENU'), newLine,
     write('The objective of Nex is to create a connected chain of a player\'s stones linking the opposite edges of the board marked by the player\'s number.'), newLine, newLine,
     write('You can execute 2 types of moves:'), newLine, newLine,
     optionNewLine(1, 'Place a stone AND a neutral one on empty cells'),
@@ -143,7 +138,6 @@ retrieve_move_menu(Gamestate, Move) :- % if its first move of player 2, invert w
     length(Board, Length),
     nth0(0, Value, EmptyCount),
     EmptyCountNeeded is Length*Length - 2,
-    %format('empty count ~d empty count needed ~d\n',[EmptyCount, EmptyCountNeeded]),
     EmptyCount == EmptyCountNeeded,
     write('Do you want to switch the outer walls? This is your only chance: '),
     newLine, newLine,
