@@ -134,17 +134,17 @@ deleted(_, [], []).
 
 
 
-%print_valid_moves([]):- newLine.
+print_valid_moves([]):- newLine.
 
-%print_valid_moves([H|T]):- 
-    %printmove(H), print_valid_moves(T).
+print_valid_moves([H|T]):- 
+    printmove(H), print_valid_moves(T).
 
-%printmove(pair(pair(X,Y), P)):- 
-    %format('Valid move: x ~d y ~d p ~d\n', [X,Y,P]).
+printmove(pair(pair(X,Y), P)):- 
+    format('Valid move: x ~d y ~d p ~d\n', [X,Y,P]).
 
-% get_move_info(+Move, -Row, -Col, Player)
+get_move_info(+Move, -Row, -Col, Player):-
 % Get the Row, Column and new Symbol of that Tile from a move
-get_move_info(pair(pair(X,Y), P), X, Y, P).
+    get_move_info(pair(pair(X,Y), P), X, Y, P).
 
 % construct_move(+Gamestate, -Walls)
 % Get the current outer Walls from the Gamestate

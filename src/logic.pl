@@ -199,9 +199,9 @@ matrix_has_path_left_right([_|Tail], RowIndex, Board, Symbol) :-
 % choose_move(+Gamestate, +Difficulty, -Move)
 % Choses a valid move for the computer to execute, according to the Difficulty chosen
 choose_move(Gamestate, 1, Move):- 
-    %write('Bot is chosing its move!\n')
-    %sleep(2),
-    random(1, 3, N),
+    write('Bot is chosing its move!\n'),
+    sleep(1),
+    random(1, 2, N),
     %format('First random chosen is ~d \n',[N]),
     getCurrBoard(Gamestate, Board),
     getCurrPlayerChar(Gamestate, Player),
@@ -214,19 +214,20 @@ choose_move(Gamestate, 1, Move):-
     %write('Second Move can be in :\n'),
     %print_valid_moves(ListOfMoves2),
     ValidMoveList = [ListOfMoves1, ListOfMoves2],
-    choose_move_aux(N, ValidMoveList, Move).
+    (N==1 -> choose_move_aux(2, ValidMoveList, 0, Move); choose_move_aux(1, ValidMoveList, 0, Move)).
+    %choose_move_aux(N, ValidMoveList, Move).
 
 % choose_move_aux(+Type, +ValidMoveList, -Move)
 % Choses a valid move from the ValidMoveList for the computer to execute, according to the Type of move chosen
-choose_move_aux(1, ValidMoveList, Move):- 
+choose_move_aux(1, ValidMoveList, Redirect, Move):- 
     nth0(0, ValidMoveList, TypeChosen),
     TypeChosen \= [],
     length(TypeChosen, Length),
     %format('Length of 1 list of moves is ~d\n',[Length]),
     Length > 1,
-    random(0, Length, FirstMoveIndex),
+    random(1, Length, FirstMoveIndex),
     %format('FirstMoveIndex is ~d\n',[FirstMoveIndex]),
-    nth0(FirstMoveIndex, TypeChosen, FirstMove),
+    nth1(FirstMoveIndex, TypeChosen, FirstMove),
     %write('FirstMove is\n'),
     %printmove(FirstMove),
     get_move_info(FirstMove, Move_1_X, Move_1_Y, Move_1_P),
@@ -243,60 +244,85 @@ choose_move_aux(1, ValidMoveList, Move):-
     %write('2 move of first move can be in:\n'),
     %print_valid_moves(FinalTypeChosen),
     length(FinalTypeChosen, NewLength),
-    random(0, NewLength, SecondMoveIndex),
-    nth0(SecondMoveIndex, FinalTypeChosen, SecondMove),
+    NewLength > 0,
+    random(1, NewLength, SecondMoveIndex),
+    nth1(SecondMoveIndex, FinalTypeChosen, SecondMove),
     %write('Second move is \n'),
     %printmove(SecondMove),
     Move = [FirstMove, SecondMove].
 
 % If it is impossible to execute a Move of this Type, try to execute a Move of another type
-choose_move_aux(1, ValidMoveList, Move):- 
+choose_move_aux(1, ValidMoveList, Redirect, Move):- 
+    Redirect == 0,
+    %nth0(0, ValidMoveList, Gato),
+    %length(Gato, Cao),
+    %format('1 deu merda pq a len do 1 move set e ~d\n',[Cao]),
     nth0(1, ValidMoveList, TypeChosen),
     length(TypeChosen, Length),
+    %format('1 Lenght ~d\n',[Length]),
     Length > 2,
-    choose_move_aux(2, ValidMoveList, Move).
+    choose_move_aux(2, ValidMoveList, 1, Move).
 
 % If none of the Type are valid, ERROR
-choose_move_aux(1, ValidMoveList, Move):- 
-    write('ERROR\n').
+choose_move_aux(1, ValidMoveList, Redirect, Move):-
+    Redirect == 1, 
+    write('The game has tied\n'),
+    menu(3).
 
-choose_move_aux(2, ValidMoveList, Move):- 
+choose_move_aux(2, ValidMoveList, Redirect, Move):- 
     nth0(1, ValidMoveList, TypeChosen),
     TypeChosen \= [],
     length(TypeChosen, Length),
+    format('Length tem de ser > 2 e e igual a ~d\n',[Length]),
     Length > 2,
-    %write('Printing ValidMoveList1\n'),
-    %print_valid_moves(TypeChosen),
-    random(0, Length, FirstMoveIndex),
-    nth0(FirstMoveIndex, TypeChosen, FirstMove),
-    %write('Printing first move\n'),
-    %printmove(FirstMove),
+    write('Printing ValidMoveList2\n'),
+    print_valid_moves(TypeChosen),
+    random(1, Length, FirstMoveIndex),
+    nth1(FirstMoveIndex, TypeChosen, FirstMove),
+    write('Printing first move\n'),
+    printmove(FirstMove),
     deleted(FirstMove, TypeChosen, NewTypeChosen),
     get_move_info(FirstMove, Move_1_X, Move_1_Y, Move_1_P),
     (Move_1_P == 5 -> exclude(pair_with_5, NewTypeChosen, NewNewTypeChosen); NewNewTypeChosen = NewTypeChosen),
-    %write('Printing ValidMoveList after first move\n'),
+    write('Printing ValidMoveList after first move\n'),
     %print_valid_moves(NewNewTypeChosen),
     length(NewNewTypeChosen, NewLength),
+    format('NewLength tem de ser > 0 e e igual a ~d\n',[NewLength]),
     NewLength > 0,
-    random(0, NewLength, SecondMoveIndex),
-    nth0(SecondMoveIndex, NewNewTypeChosen, SecondMove),
-    %write('Printing second move\n'),
-    %printmove(SecondMove),
+    random(1, NewLength, SecondMoveIndex),
+    format('SecondMoveIndex e igual a ~d\n',[SecondMoveIndex]),
+    nth1(SecondMoveIndex, NewNewTypeChosen, SecondMove),
+    write('Printing second move\n'),
+    printmove(SecondMove),
     deleted(SecondMove, NewNewTypeChosen, NewNewNewTypeChosen),
     get_move_info(SecondMove, Move_2_X, Move_2_Y, Move_2_P),
-    (Move_2_P == 5 -> exclude(pair_with_5, NewNewNewTypeChosen, NewNewNewNewTypeChosen); true),
-    (Move_2_P == 2, Move_1_P == 2 -> exclude(pair_with_2, NewNewNewTypeChosen, NewNewNewNewTypeChosen); true),
-    (Move_2_P == 1, Move_1_P == 1 -> exclude(pair_with_1, NewNewNewTypeChosen, NewNewNewNewTypeChosen); true),
-    %write('Printing ValidMoveList after second Move\n'),
-    %print_valid_moves(NewNewNewNewTypeChosen),
+    ((Move_2_P == 5 -> exclude(pair_with_5, NewNewNewTypeChosen, NewNewNewNewTypeChosen); NewNewNewNewTypeChosen = NewNewNewTypeChosen)),
+    ((Move_2_P == 2, Move_1_P == 2) -> exclude(pair_with_2, NewNewNewTypeChosen, NewNewNewNewTypeChosen); NewNewNewNewTypeChosen = NewNewNewTypeChosen),
+    ((Move_2_P == 1, Move_1_P == 1) -> exclude(pair_with_1, NewNewNewTypeChosen, NewNewNewNewTypeChosen); NewNewNewNewTypeChosen = NewNewNewTypeChosen),
+    write('Printing ValidMoveList after second Move\n'),
     length(NewNewNewNewTypeChosen, NewNewLength),
+    format('NewNewLength tem de ser > 0 e e igual a ~d\n',[NewNewLength]),
+    %print_valid_moves(NewNewNewNewTypeChosen),
     NewNewLength > 0,
-    random(0, NewNewLength, ThirdMoveIndex),
-    nth0(ThirdMoveIndex, NewNewNewNewTypeChosen, ThirdMove),
-    %write('Printing Third Move\n'),
-    %printmove(ThirdMove),
+    random(1, NewNewLength, ThirdMoveIndex),
+    format('ThirdMoveIndex e igual a ~d\n',[ThirdMoveIndex]),
+    nth1(ThirdMoveIndex, NewNewNewNewTypeChosen, ThirdMove),
+    write('Printing Third Move\n'),
+    printmove(ThirdMove),
     Move = [FirstMove, SecondMove, ThirdMove].
 
 % Move type 2 was chosen but not possible, redirecting to move choosing a Move of Type 1
-choose_move_aux(2, ValidMoveList, Move):- 
-    choose_move_aux(1, ValidMoveList, Move).
+choose_move_aux(2, ValidMoveList, Redirect, Move):- 
+    Redirect == 0,
+    nth0(0, ValidMoveList, TypeChosen),
+    length(TypeChosen, Length),
+    %format('1 Lenght ~d\n',[Length]),
+    Length > 1,
+    write('2 deu merda\n'),
+    choose_move_aux(1, ValidMoveList, 1, Move).
+
+% Move type 2 was chosen but not possible, redirecting to move choosing a Move of Type 1
+choose_move_aux(2, ValidMoveList, Redirect, Move):-
+    Redirect == 1,
+    write('The game has tied\n'),
+    menu(3).

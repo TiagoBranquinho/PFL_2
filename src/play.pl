@@ -13,8 +13,8 @@ game_over(Gamestate, Winner):-
     switch_players(Player, LastPlayer),
     getPlayerChar(LastPlayer, LastPlayerChar),
     getCurrWalls(Gamestate, Walls),
-    nth0(0, Walls, VerticalWalls),
-    VerticalWalls == LastPlayerChar,
+    nth0(1, Walls, HorizontalWalls),
+    HorizontalWalls == LastPlayerChar,
     getCurrBoard(Gamestate, Board),
     matrix_has_path_top_bottom(Board, LastPlayerChar),
     Winner = LastPlayer.
@@ -23,8 +23,8 @@ game_over(Gamestate, Winner):-
     getCurrPlayer(Gamestate, Player),
     switch_players(Player, LastPlayer),
     getCurrWalls(Gamestate, Walls),
-    nth0(1, Walls, HorizontalWalls),
-    HorizontalWalls == LastPlayer,
+    nth0(0, Walls, VerticalWalls),
+    VerticalWalls == LastPlayer,
     getCurrBoard(Gamestate, Board),
     matrix_has_path_left_right(Board, LastPlayer),
     Winner = LastPlayer.
@@ -40,8 +40,9 @@ update_game(Gamestate):-
     value(Gamestate, Value),
     display_stats(Value),
     getCurrBoard(Gamestate, Board),
-    display_board_header(Board),
-    display_board(Board, 0),
+    getCurrWalls(Gamestate, Walls),
+    display_board_header(Board, Walls),
+    display_board(Board, Walls, 0),
     readInput,
     menu(3).
 
