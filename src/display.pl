@@ -111,26 +111,30 @@ display_game(Gamestate):-
     getCurrBoard(Gamestate, Board),
     getCurrWalls(Gamestate, Walls),
     display_board_header(Board, Walls),
-    display_board(Board, Walls, 0).
+    display_board(Board, Walls, 1).
 
 
 % display_board(+Board, +Walls, +Number)
 % Prints the current board and walls, printing Number spaces (incremented) to achieve the required board shape
 display_board([], [VerticalWall, HorizontalWall, InvertChoiceMade],X):-
     print_spaces(X),
-    write('  '),
-    print_digits(X, HorizontalWall),
+    write('     '),
+    print_digits(X - 1, HorizontalWall),
     newLine.
 
-display_board([H|T], [VerticalWall, HorizontalWall, InvertChoiceMade], X):- 
+display_board([H|T], [VerticalWall, HorizontalWall, InvertChoiceMade], X):-
+    write(X),
+    write('  '), 
     print_spaces(X),
     format('~d',[VerticalWall]),
     print_line(H, VerticalWall),
     NewX is X + 1,
     display_board(T, [VerticalWall, HorizontalWall, InvertChoiceMade], NewX).
     
-display_board_header([H|T], [VerticalWall, HorizontalWall, InvertChoiceMade]):- 
-    write(' '),
+display_board_header([H|T], [VerticalWall, HorizontalWall, InvertChoiceMade]):-
+    write('    '), 
+    print_subtitle_line(H, HorizontalWall, 65),
+    write('      '),
     print_header_line(H, HorizontalWall).
 
 print_line([], VerticalWall):- 
@@ -152,6 +156,17 @@ print_header_line([H|T], HorizontalWall) :-
     format('~d',[HorizontalWall]),
     write('  '),
     print_header_line(T, HorizontalWall).
+
+print_subtitle_line([], HorizontalWall, Code):- 
+    write('   '),
+    newLine.
+
+print_subtitle_line([H|T], HorizontalWall, Code) :- 
+    char_code(A, Code),
+    write(A),
+    write('  '),
+    Code1 is Code + 1,
+    print_subtitle_line(T, HorizontalWall, Code1).
 
 % print_spaces(+Number)
 % Prints Number spaces
