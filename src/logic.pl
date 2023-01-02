@@ -188,11 +188,11 @@ choose_move(Gamestate, 1, Move):-
     %write('Second Move can be in :\n'),
     %print_valid_moves(ListOfMoves2),
     ValidMoveList = [ListOfMoves1, ListOfMoves2],
-    choose_move_aux(N, ValidMoveList, Move).
+    choose_move_aux(N, ValidMoveList, 0, Move).
 
 % choose_move_aux(+Type, +ValidMoveList, -Move)
 % Choses a valid move from the ValidMoveList for the computer to execute, according to the Type of move chosen
-choose_move_aux(1, ValidMoveList, Move):- 
+choose_move_aux(1, ValidMoveList, R, Move):- 
     nth0(0, ValidMoveList, TypeChosen),
     TypeChosen \= [],
     length(TypeChosen, Length),
@@ -224,17 +224,19 @@ choose_move_aux(1, ValidMoveList, Move):-
     Move = [FirstMove, SecondMove].
 
 % If it is impossible to execute a Move of this Type, try to execute a Move of another type
-choose_move_aux(1, ValidMoveList, Move):- 
+choose_move_aux(1, ValidMoveList, R, Move):- 
     nth0(1, ValidMoveList, TypeChosen),
     length(TypeChosen, Length),
-    Length > 2,
-    choose_move_aux(2, ValidMoveList, Move).
+    Length > 2, R == 0,
+    choose_move_aux(2, ValidMoveList, 1, Move).
 
 % If none of the Type are valid, ERROR
-choose_move_aux(1, ValidMoveList, Move):- 
-    write('ERROR\n').
+choose_move_aux(1, ValidMoveList, R, Move):- 
+    newLine, write('The game has tied'), newLine,
+    readInput,
+    menu(3).
 
-choose_move_aux(2, ValidMoveList, Move):- 
+choose_move_aux(2, ValidMoveList, R, Move):- 
     nth0(1, ValidMoveList, TypeChosen),
     TypeChosen \= [],
     length(TypeChosen, Length),
@@ -272,5 +274,12 @@ choose_move_aux(2, ValidMoveList, Move):-
     Move = [FirstMove, SecondMove, ThirdMove].
 
 % Move type 2 was chosen but not possible, redirecting to move choosing a Move of Type 1
-choose_move_aux(2, ValidMoveList, Move):- 
-    choose_move_aux(1, ValidMoveList, Move).
+choose_move_aux(2, ValidMoveList, R, Move):- 
+    R == 0,
+    choose_move_aux(1, ValidMoveList, 1, Move).
+
+% Move type 2 was chosen but not possible, redirecting to move choosing a Move of Type 1
+choose_move_aux(2, ValidMoveList, R, Move):- 
+    write('The game has tied'), newLine,
+    readInput,
+    menu(3).

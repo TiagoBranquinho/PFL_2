@@ -104,13 +104,13 @@ botvbotMenuNext(2, BoardSizeOpt) :-
 % Present the rules. Redirects to main menu after user entering any input
 rulesMenu(BoardSizeOpt) :-
     clear,
-    menuHeaderText('RULES MENU'),
-    write('The objective of Nex is to create a connected chain of a player\'s stones linking the opposite edges of the board marked by the player\'s number.'), newLine,
-    write('You can execute 2 types of moves:'), newLine,
+    menuHeaderText('RULES MENU'),newLine
+    write('The objective of Nex is to create a connected chain of a player\'s stones linking the opposite edges of the board marked by the player\'s number.'), newLine, newLine,
+    write('You can execute 2 types of moves:'), newLine, newLine,
     optionNewLine(1, 'Place a stone AND a neutral one on empty cells'),
-    optionNewLine(2, 'Replace two neutral stones with your stones AND replace a different stone of yours on the board to neutral stone'),
-    write('Also Player 2, in his first move, has the possibility to switch walls with Player 1'), newLine,
-    write('1 - Player 1\'s tile  2 - 2 - Player 2\'s tile  5 - Neutral tile  0 - Empty tile'), newLine,
+    optionNewLine(2, 'Replace two neutral stones with your stones AND replace a different stone of yours on the board to neutral stone'), newLine,
+    write('Also Player 2, in his first move, has the possibility to switch walls with Player 1'), newLine, newLine,
+    write('1 - Player 1\'s tile  2 - 2 - Player 2\'s tile  5 - Neutral tile  0 - Empty tile'), newLine, newLine,
     readInput,
     menu(BoardSizeOpt).
 
