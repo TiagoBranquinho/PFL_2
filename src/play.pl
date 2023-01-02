@@ -76,13 +76,8 @@ move(Gamestate, [CurrMove|NextMove], NewGamestate):-
     getCurrPlayer(Gamestate, Player),
     getCurrDifficulty(Gamestate, Difficulty),
     getCurrWalls(Gamestate, Walls),
-    %printmove(CurrMove),
     get_move_info(CurrMove, X, Y, P),
     update_matrix(Board, X, Y, P, NewBoard),    
-    %display_board(NewBoard),
-    %getCurrBoard(NewGameState, Boarde),
-    %write('final board\n'),
-    %display_board(Boarde),
     (NextMove == [] -> switch_players(Player, NewPlayer) ; NewPlayer = Player),
     create_game_state(NewPlayer, Difficulty, Walls, NewBoard, TempGamestate),
     move(TempGamestate, NextMove, NewGamestate).    

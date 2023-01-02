@@ -12,41 +12,41 @@ menu(BoardSizeOpt):-
     newLine,
     optionNewLine(6, 'QUIT'),
     read_digit_bounds(1, 6, Choice),
-    mainMenuNext(Choice, BoardSizeOpt).
+    menu_next(Choice, BoardSizeOpt).
 
-% mainMenuNext(+Choice, +BoardSizeOpt)
+% menu_next(+Choice, +BoardSizeOpt)
 % Redirects to the next menu, according to the Choice
-mainMenuNext(1, BoardSizeOpt) :- pvpMenu(BoardSizeOpt).
+menu_next(1, BoardSizeOpt) :- pvp_menu(BoardSizeOpt).
 
-mainMenuNext(2, BoardSizeOpt) :- pveMenu(BoardSizeOpt).
+menu_next(2, BoardSizeOpt) :- pveMenu(BoardSizeOpt).
 
-mainMenuNext(3, BoardSizeOpt) :- botvbotMenu(BoardSizeOpt).
+menu_next(3, BoardSizeOpt) :- botvbotMenu(BoardSizeOpt).
 
-mainMenuNext(4, BoardSizeOpt) :- rulesMenu(BoardSizeOpt).
+menu_next(4, BoardSizeOpt) :- rulesMenu(BoardSizeOpt).
 
-mainMenuNext(5, BoardSizeOpt) :- boardSizeMenu.
+menu_next(5, BoardSizeOpt) :- boardSizeMenu.
 
-mainMenuNext(6, BoardSizeOpt) :- halt(0).
+menu_next(6, BoardSizeOpt) :- halt(0).
 
 
-% pvpMenu(+BoardSizeOpt)
+% pvp_menu(+BoardSizeOpt)
 % Displays the player vs player menu
-pvpMenu(BoardSizeOpt) :-
+pvp_menu(BoardSizeOpt) :-
     clear,
     menuHeaderText('PLAYER vs PLAYER MENU'),
     optionNewLine(1, 'PLAY'),
     optionNewLine(2, 'GO BACK'),
     read_digit_bounds(1, 2, Choice),
-    pvpMenuNext(Choice, BoardSizeOpt).
+    pvp_menu_next(Choice, BoardSizeOpt).
 
 
-% pvpMenuNext(+Choice, +BoardSizeOpt)
+% pvp_menu_next(+Choice, +BoardSizeOpt)
 % Redirects to the next menu, according to the Choice
-pvpMenuNext(1, BoardSizeOpt) :- %PLAY PVP   
+pvp_menu_next(1, BoardSizeOpt) :- %PLAY PVP   
     initial_state(BoardSizeOpt, 1, 0, Gamestate),
     update_game(Gamestate).
 
-pvpMenuNext(2, BoardSizeOpt) :-
+pvp_menu_next(2, BoardSizeOpt) :-
     menu(BoardSizeOpt).
 
 % pveMenu(+BoardSizeOpt)
