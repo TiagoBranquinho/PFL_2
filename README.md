@@ -441,3 +441,8 @@ value(Gamestate, Value):-
 
 ### Jogada do computador
 
+A jogada do computador é escolhida pelo predicado `choose_move/3`, de acordo com a dificuldade escolhida. Neste caso, apenas a dificuldade fácil foi implementada.
+
+Em primeiro lugar, é escolhido um número aleatório entre 1 e 2, de forma a que a primeira jogada que o bot tente realizar seja aleatória. Em seguida, o bot tenta realizar essa jogada, escolhendo aleatoriamente movimentos desta, à medida que vai modificando a nova lista de movimentos possiveis até obter uma jogada.
+
+Caso o tipo de jogada escolhido não seja possível o bot tentará realizar uma jogada do outro tipo.
