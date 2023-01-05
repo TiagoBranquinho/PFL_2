@@ -173,8 +173,7 @@ matrix_has_path_left_right([_|Tail], RowIndex, Board, Symbol) :-
 % choose_move(+Gamestate, +Difficulty, -Move)
 % Choses a valid move for the computer to execute, according to the Difficulty chosen
 choose_move(Gamestate, 1, Move):- 
-    write('Bot is chosing its move!\n')
-    sleep(1),
+    write('Bot is chosing its move!\n'),
     random(1, 3, N),
     getCurrBoard(Gamestate, Board),
     getCurrPlayerChar(Gamestate, Player),
